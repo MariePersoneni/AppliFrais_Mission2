@@ -100,7 +100,7 @@ public class HfRecapActivity extends AppCompatActivity {
 	 * Retour à l'activité principale (le menu)
 	 */
 	private void retourActivityPrincipale() {
-		Intent intent = new Intent(HfRecapActivity.this, MainActivity.class) ;
+		Intent intent = new Intent(HfRecapActivity.this, MenuActivity.class) ;
 		startActivity(intent) ;   					
 	}
 }

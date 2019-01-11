@@ -11,12 +11,12 @@ import android.widget.ImageButton;
 
 import java.util.Hashtable;
 
-public class MainActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_menu);
         setTitle("GSB : Suivi des frais");
         // récupération des informations sérialisées
         recupSerialize();
@@ -43,12 +43,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private void recupSerialize() {
         /* Pour éviter le warning "Unchecked cast from Object to Hash" produit par un casting direct :
-         * Global.listFraisMois = (Hashtable<Integer, FraisMois>) Serializer.deSerialize(Global.filename, MainActivity.this);
+         * Global.listFraisMois = (Hashtable<Integer, FraisMois>) Serializer.deSerialize(Global.filename, MenuActivity.this);
          * On créé un Hashtable générique <?,?> dans lequel on récupère l'Object retourné par la méthode deSerialize, puis
          * on cast chaque valeur dans le type attendu.
          * Seulement ensuite on affecte cet Hastable à Global.listFraisMois.
         */
-        Hashtable<?, ?> monHash = (Hashtable<?, ?>) Serializer.deSerialize(MainActivity.this);
+        Hashtable<?, ?> monHash = (Hashtable<?, ?>) Serializer.deSerialize(MenuActivity.this);
         if (monHash != null) {
             Hashtable<Integer, FraisMois> monHashCast = new Hashtable<>();
             for (Hashtable.Entry<?, ?> entry : monHash.entrySet()) {
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 // ouvre l'activité
-                Intent intent = new Intent(MainActivity.this, classe);
+                Intent intent = new Intent(MenuActivity.this, classe);
                 startActivity(intent);
             }
         });
