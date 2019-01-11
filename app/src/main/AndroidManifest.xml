@@ -12,10 +12,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MenuActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
@@ -29,7 +27,14 @@
         <activity android:name=".KmActivity" />
         <activity android:name=".EtapeActivity" />
         <activity android:name=".NuiteeActivity" />
-        <activity android:name=".RepasActivity"></activity>
+        <activity android:name=".RepasActivity" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
