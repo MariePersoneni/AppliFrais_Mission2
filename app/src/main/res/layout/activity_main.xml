@@ -38,7 +38,8 @@
                 android:ems="10"
                 android:gravity="center"
                 android:inputType="textPersonName"
-                android:text="Login" />
+                android:text="Login"
+                android:textColor="@color/colorGrey" />
 
             <EditText
                 android:id="@+id/txtMdp"
@@ -47,7 +48,8 @@
                 android:ems="10"
                 android:gravity="center"
                 android:inputType="textPassword"
-                android:text="****" />
+                android:text="****"
+                android:textColor="@color/colorGrey" />
         </LinearLayout>
 
         <LinearLayout
