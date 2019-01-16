@@ -1,15 +1,31 @@
 package fr.cned.emdsgil.suividevosfrais;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends AppCompatActivity {
+
+    private EditText id, mdp;
+    private Button bouton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         txt_change((EditText)findViewById(R.id.txtLogin));
         txt_change((EditText)findViewById(R.id.txtMdp));
         focus_change((EditText)findViewById(R.id.txtMdp));
-
+        btnConnexion_clic();
     }
 
     /**
@@ -63,6 +79,16 @@ public class MainActivity extends AppCompatActivity {
                 if(hasFocus & texte.equals("****")){
                     champ.setText("");
                 }
+            }
+        });
+    }
+
+    private void btnConnexion_clic() {
+        ((Button)findViewById(R.id.btnConnexion)).setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // Envoi de la requête
+                new Connexion().execute("http://192.168.1.8/Suividevosfrais2/service.php");
             }
         });
     }
