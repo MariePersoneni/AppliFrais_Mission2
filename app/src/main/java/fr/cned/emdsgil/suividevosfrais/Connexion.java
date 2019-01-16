@@ -1,6 +1,8 @@
 package fr.cned.emdsgil.suividevosfrais;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -12,6 +14,12 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class Connexion extends AsyncTask<String, Void, String> {
+
+    private String reponse;
+
+    public String getReponse() {
+        return reponse;
+    }
 
     @Override
     protected String doInBackground(String... strings) {
@@ -47,8 +55,15 @@ public class Connexion extends AsyncTask<String, Void, String> {
         } else {
             return null;
         }
-
     }
 
+    /**
+     * Cette fonction doit être appelée depuis le thread principal
+     * @param s = le résultat de la requête envoyée par doInBackground
+     */
+    @Override
+    protected void onPostExecute(String s){
+            reponse = s;
 
+    }
 }

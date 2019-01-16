@@ -1,6 +1,7 @@
 package fr.cned.emdsgil.suividevosfrais;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -23,9 +25,13 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends AppCompatActivity {
-
+    private Context context = this;
     private EditText id, mdp;
     private Button bouton;
+
+    public Context getContext() {
+        return context;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,5 +97,14 @@ public class MainActivity extends AppCompatActivity {
                 new Connexion().execute("http://192.168.1.8/Suividevosfrais2/service.php");
             }
         });
+    }
+
+    public void afficheResultat(String reponse){
+        if(reponse.equals("1")){
+            // mdp incorrect
+            Toast.makeText(MainActivity.this, "Mot de passe incorrect", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MainActivity.this, "Connexion réussie", Toast.LENGTH_SHORT).show();
+        }
     }
 }
