@@ -1,5 +1,8 @@
 package fr.cned.emdsgil.suividevosfrais.AccesConnexion;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
 
 public class IntermediaireArrierePlan implements AsyncResponse {
@@ -13,13 +16,30 @@ public class IntermediaireArrierePlan implements AsyncResponse {
     /**
      * Méthode qui permet de récupérer le résultat de la
      * requête gérée par TacheArrièrePlan et de la transmettre
-     * au controleur
+     * au controleur.
+     * Si le résultat correspond aux données du visiteur, on renvoi
+     * l'id de ce visiteur, sinon on renvoi "1" ce qui qui signifie
+     * mdp incorrect
      *
      * @param output résultat de la requête
      */
     @Override
     public void processFinish(String output) {
-        controle.RetourRequete(output);
+        // vérification contenu des données : 1 = mdp incorrect
+        if (!output.equals("1")){
+            // si output != 1 on envoi les données décodées
+            try {
+                JSONObject outputJSON = new JSONObject(output);
+                // récupération de l'ID du visiteur
+                String id = outputJSON.getString("id");
+                controle.RetourRequete(id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // si output = 1 : envoi "1"
+            controle.RetourRequete("1");
+        }
     }
 
     /**

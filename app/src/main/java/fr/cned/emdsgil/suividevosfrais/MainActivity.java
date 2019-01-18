@@ -1,5 +1,6 @@
 package fr.cned.emdsgil.suividevosfrais;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
         if (resultat.equals("1")){
             Toast.makeText(MainActivity.this, "Login / mdp incorrect", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(MainActivity.this, "Connexion réussie :",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "Connexion réussie :",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+            startActivity(intent);
         }
     }
 }
