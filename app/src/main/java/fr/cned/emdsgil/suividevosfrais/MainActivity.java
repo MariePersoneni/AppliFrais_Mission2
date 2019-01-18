@@ -34,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Envoi de la requête
-                controle.lanceRequete();
-                //new TacheArrierePlan().execute("http://192.168.1.8/Suividevosfrais2/service.php");
+                String login = ((EditText)findViewById(R.id.txtLogin)).getText().toString();
+                String mdp = ((EditText)findViewById(R.id.txtMdp)).getText().toString();
+                controle.lanceRequete(login, mdp);
             }
         });
     }

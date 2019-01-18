@@ -15,18 +15,15 @@ import fr.cned.emdsgil.suividevosfrais.AccesConnexion.AsyncResponse;
 
 public class TacheArrierePlan extends AsyncTask<String, Void, String> {
 
-    private String reponse;
     public AsyncResponse delegate=null;
-
-    public String getReponse() {
-        return reponse;
-    }
 
     @Override
     protected String doInBackground(String... strings) {
+        String login = strings[0];
+        String mdp = strings[1];
         StringBuffer chaine = new StringBuffer("");
         try{
-            String urlParameters = "action=read&login=dandre&mdp=test"; // paramètres à envoyer à service.php
+            String urlParameters = "action=read&login=" + login + "&mdp=" + mdp; // paramètres à envoyer à service.php
             byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8); // paramètres formatés en UTF-8
             String request = "http://192.168.1.8/Suividevosfrais2/service.php"; // adresse du fichier PHP qui va executer la requête
             URL url = new URL(request); // création de l'URL

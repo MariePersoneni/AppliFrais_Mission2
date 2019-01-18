@@ -25,8 +25,8 @@ public class Controle {
         return Controle.instance;
     }
 
-    public void lanceRequete(){
-        intermediaireArrierePlan.envoi();
+    public void lanceRequete(String login, String mdp){
+        intermediaireArrierePlan.envoi(login, mdp);
     }
 
     public void finderecup(String s){

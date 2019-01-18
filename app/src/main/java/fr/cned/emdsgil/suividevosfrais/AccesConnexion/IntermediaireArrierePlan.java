@@ -15,9 +15,9 @@ public class IntermediaireArrierePlan implements AsyncResponse {
         controle.finderecup(output);
     }
 
-    public void envoi(){
+    public void envoi(String login, String mdp){
         TacheArrierePlan tacheArrierePlan = new TacheArrierePlan();
         tacheArrierePlan.delegate = this;
-        tacheArrierePlan.execute("http://192.168.1.8/Suividevosfrais2/service.php");
+        tacheArrierePlan.execute(login, mdp);
     }
 }
