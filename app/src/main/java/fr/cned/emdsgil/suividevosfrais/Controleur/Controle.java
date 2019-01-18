@@ -1,11 +1,14 @@
-package fr.cned.emdsgil.suividevosfrais;
+package fr.cned.emdsgil.suividevosfrais.Controleur;
 
 import android.content.Context;
+
+import fr.cned.emdsgil.suividevosfrais.AccesConnexion.IntermediaireArrierePlan;
+import fr.cned.emdsgil.suividevosfrais.MainActivity;
 
 public class Controle {
     private static Controle instance = null;
     private static Context context;
-    private static RecupResponse recupResponse;
+    private static IntermediaireArrierePlan intermediaireArrierePlan;
 
     private Controle(){
         super();
@@ -17,13 +20,13 @@ public class Controle {
         }
         if(Controle.instance == null){
             Controle.instance = new Controle();
-            recupResponse = new RecupResponse();
+            intermediaireArrierePlan = new IntermediaireArrierePlan();
         }
         return Controle.instance;
     }
 
     public void lanceRequete(){
-        recupResponse.envoi();
+        intermediaireArrierePlan.envoi();
     }
 
     public void finderecup(String s){
