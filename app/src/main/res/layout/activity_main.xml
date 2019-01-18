@@ -35,13 +35,12 @@
                 android:id="@+id/txtLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:editable="true"
                 android:ems="10"
                 android:enabled="true"
                 android:gravity="center"
+                android:hint="Login"
                 android:inputType="textPersonName"
-                android:text="Login"
-                android:textColor="@color/colorGrey" />
+                android:textColorHint="@color/colorGrey" />
 
             <EditText
                 android:id="@+id/txtMdp"
@@ -49,9 +48,9 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:gravity="center"
+                android:hint="****"
                 android:inputType="textPassword"
-                android:text="****"
-                android:textColor="@color/colorGrey" />
+                android:textColorHint="@color/colorGrey" />
         </LinearLayout>
 
         <LinearLayout

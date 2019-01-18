@@ -1,7 +1,10 @@
 package fr.cned.emdsgil.suividevosfrais;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -16,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 public class Connexion extends AsyncTask<String, Void, String> {
 
     private String reponse;
+    public AsyncResponse delegate=null;
 
     public String getReponse() {
         return reponse;
@@ -63,7 +67,6 @@ public class Connexion extends AsyncTask<String, Void, String> {
      */
     @Override
     protected void onPostExecute(String s){
-            reponse = s;
-
+        delegate.processFinish(s);
     }
 }
