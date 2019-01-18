@@ -18,15 +18,18 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         setTitle("GSB : Suivi des frais");
+        // récupère l'id du visiteur
+        Intent intent = getIntent();
+        String idVisiteur = intent.getStringExtra("idVisiteur");
         // récupération des informations sérialisées
         recupSerialize();
         // chargement des méthodes événementielles
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdKm)), KmActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHf)), HfActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdRepas)), RepasActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdNuitee)), NuiteeActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdEtape)), EtapeActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHfRecap)), HfRecapActivity.class);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdKm)), KmActivity.class, idVisiteur);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHf)), HfActivity.class, idVisiteur);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdRepas)), RepasActivity.class, idVisiteur);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdNuitee)), NuiteeActivity.class, idVisiteur);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdEtape)), EtapeActivity.class, idVisiteur);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHfRecap)), HfRecapActivity.class, idVisiteur);
         cmdTransfert_clic();
     }
 
@@ -70,11 +73,12 @@ public class MenuActivity extends AppCompatActivity {
     /**
      * Sur la sélection d'un bouton dans l'activité principale ouverture de l'activité correspondante
      */
-    private void cmdMenu_clic(ImageButton button, final Class classe) {
+    private void cmdMenu_clic(ImageButton button, final Class classe, final String idVisiteur) {
         button.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                // ouvre l'activité
+                // ouvre l'activité et lui transmet l'id du visiteur
                 Intent intent = new Intent(MenuActivity.this, classe);
+                intent.putExtra("idVisiteur",idVisiteur);
                 startActivity(intent);
             }
         });

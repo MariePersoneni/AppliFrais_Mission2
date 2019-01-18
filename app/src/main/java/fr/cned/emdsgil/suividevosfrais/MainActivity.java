@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //Toast.makeText(MainActivity.this, "Connexion réussie :",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+            intent.putExtra("idVisiteur",resultat);
             startActivity(intent);
         }
     }
