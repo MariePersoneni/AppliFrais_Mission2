@@ -17,6 +17,17 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
 
     public AsyncResponse delegate=null;
 
+    /**
+     * Fonction qui s'execute en arrière plan et qui retourne un résultat
+     * Ici le résultat est la réponse du serveur
+     *
+     * @param strings : tableau de paramètres, ici :
+     *                param1 = login
+     *                param2 = mdp
+     *
+     * @return le résultat de la requête si la connexion a réussi ou null
+     * le cas échéant
+     */
     @Override
     protected String doInBackground(String... strings) {
         String login = strings[0];
@@ -56,7 +67,12 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
     }
 
     /**
-     * Cette fonction doit être appelée depuis le thread principal
+     * Méthode qui reçoit le résultat de la méthode doIBackground
+     * ci-dessus.
+     * Le delegate a été instancié par la classe IntermediaireArrierePlan
+     * dans sa méthode envoi utilisée auparavant. Il appelle la méthode
+     * processFinish de la classe IntermediaireArrierePlan.
+     *
      * @param s = le résultat de la requête envoyée par doInBackground
      */
     @Override
