@@ -49,7 +49,11 @@ public class Controle {
      * l'intermédiaire et qui l'envoi à la page de connexion (MainActivity)
      * @param s
      */
-    public void RetourRequete(String s){
+    public void RetourRequete_getIdVisiteur(String s){
         ((MainActivity)context).afficheResultat(s);
+    }
+
+    public void getLesLignesFraisForfait(String idVisiteur) {
+        intermediaireArrierePlan.envoiDemandeFraisForfait(idVisiteur);
     }
 }

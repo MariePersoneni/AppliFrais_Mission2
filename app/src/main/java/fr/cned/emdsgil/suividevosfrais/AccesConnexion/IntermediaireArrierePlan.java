@@ -1,13 +1,19 @@
 package fr.cned.emdsgil.suividevosfrais.AccesConnexion;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
 
 public class IntermediaireArrierePlan implements AsyncResponse {
 
     private Controle controle;
+    private TacheArrierePlan tacheArrierePlan;
 
     public IntermediaireArrierePlan(){
         controle = Controle.getInstance(null);
@@ -17,28 +23,47 @@ public class IntermediaireArrierePlan implements AsyncResponse {
      * Méthode qui permet de récupérer le résultat de la
      * requête gérée par TacheArrièrePlan et de la transmettre
      * au controleur.
-     * Si le résultat correspond aux données du visiteur, on renvoi
-     * l'id de ce visiteur, sinon on renvoi "1" ce qui qui signifie
-     * mdp incorrect
      *
      * @param output résultat de la requête
      */
     @Override
     public void processFinish(String output) {
-        // vérification contenu des données : 1 = mdp incorrect
-        if (!output.equals("1")){
-            // si output != 1 on envoi les données décodées
-            try {
-                JSONObject outputJSON = new JSONObject(output);
-                // récupération de l'ID du visiteur
-                String id = outputJSON.getString("id");
-                controle.RetourRequete(id);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            // si output = 1 : envoi "1"
-            controle.RetourRequete("1");
+        String action = tacheArrierePlan.getAction();
+        switch (action){
+            case "getIdVisiteur" :
+                /**                 *
+                 * Si le résultat correspond aux données du visiteur, on renvoi
+                 * l'id de ce visiteur, sinon on renvoi "1" ce qui qui signifie
+                 * mdp incorrect                 *
+                 */
+                if (!output.equals("1")){
+                    try {
+                        JSONObject outputJSON = new JSONObject(output);
+                        // récupération de l'ID du visiteur
+                        String id = outputJSON.getString("id");
+                        controle.RetourRequete_getIdVisiteur(id);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    // si output = 1 : envoi "1"
+                    controle.RetourRequete_getIdVisiteur("1");
+                }
+                break;
+            case "getLignesFraisForfait" :
+                if (output != null){
+                    action = action;
+                    try {
+                        JSONArray outputJSON = new JSONArray(output);
+                        List<String[]> lignesfraisforfait = new ArrayList<String[]>();
+                        for (int i = 0; i < outputJSON.length() ; i++){
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
         }
     }
 
@@ -50,8 +75,14 @@ public class IntermediaireArrierePlan implements AsyncResponse {
      * @param mdp : récupéré dans txtMdp de MainActivity
      */
     public void envoi(String login, String mdp){
-        TacheArrierePlan tacheArrierePlan = new TacheArrierePlan();
+        tacheArrierePlan = new TacheArrierePlan();
         tacheArrierePlan.delegate = this;
-        tacheArrierePlan.execute(login, mdp);
+        tacheArrierePlan.execute("getIdVisiteur",login, mdp);
+    }
+
+    public void envoiDemandeFraisForfait(String idVisiteur) {
+        tacheArrierePlan = new TacheArrierePlan();
+        tacheArrierePlan.delegate = this;
+        tacheArrierePlan.execute("getLignesFraisForfait", idVisiteur);
     }
 }

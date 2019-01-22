@@ -16,6 +16,11 @@ import fr.cned.emdsgil.suividevosfrais.AccesConnexion.AsyncResponse;
 public class TacheArrierePlan extends AsyncTask<String, Void, String> {
 
     public AsyncResponse delegate=null;
+    private String action = null;
+
+    public String getAction() {
+        return action;
+    }
 
     /**
      * Fonction qui s'execute en arrière plan et qui retourne un résultat
@@ -30,11 +35,21 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
      */
     @Override
     protected String doInBackground(String... strings) {
-        String login = strings[0];
-        String mdp = strings[1];
+        action = strings[0];
+        String param = "";
+        switch (action){
+            case "getIdVisiteur" :
+                String login = strings[1];
+                String mdp = strings[2];
+                param = "action=readvisiteur&login=" + login + "&mdp=" + mdp;
+                break;
+            case "getLignesFraisForfait" :
+                String idVisiteur = strings[1];
+                param = "action=readlignefraisforfait&idVisiteur=" + idVisiteur;
+        }
         StringBuffer chaine = new StringBuffer("");
         try{
-            String urlParameters = "action=read&login=" + login + "&mdp=" + mdp; // paramètres à envoyer à service.php
+            String urlParameters = param; // paramètres à envoyer à service.php
             byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8); // paramètres formatés en UTF-8
             String request = "http://192.168.1.8/Suividevosfrais2/service.php"; // adresse du fichier PHP qui va executer la requête
             URL url = new URL(request); // création de l'URL

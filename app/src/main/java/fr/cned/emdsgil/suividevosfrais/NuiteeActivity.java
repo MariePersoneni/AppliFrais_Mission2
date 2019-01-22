@@ -31,6 +31,10 @@ public class NuiteeActivity extends AppCompatActivity {
         // récupération de l'id du visiteur
         Intent intent = getIntent();
         String idVisiteur = intent.getStringExtra("idVisiteur");
+        // initialisation des propriétés
+        valoriseProprietes();
+        // récupération des frais
+        controle.getLesLignesFraisForfait(idVisiteur);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
