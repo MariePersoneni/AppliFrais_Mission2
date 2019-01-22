@@ -2,8 +2,11 @@ package fr.cned.emdsgil.suividevosfrais.Controleur;
 
 import android.content.Context;
 
+import java.util.List;
+
 import fr.cned.emdsgil.suividevosfrais.AccesConnexion.IntermediaireArrierePlan;
 import fr.cned.emdsgil.suividevosfrais.MainActivity;
+import fr.cned.emdsgil.suividevosfrais.MenuActivity;
 
 public class Controle {
     private static Controle instance = null;
@@ -55,5 +58,9 @@ public class Controle {
 
     public void getLesLignesFraisForfait(String idVisiteur) {
         intermediaireArrierePlan.envoiDemandeFraisForfait(idVisiteur);
+    }
+
+    public void RetourRequete_getLesLignesFraisForfait(List<String[]> lesLignesFraisForfait) {
+        ((MenuActivity)context).valoriseLesLignesFraisForfait(lesLignesFraisForfait);
     }
 }

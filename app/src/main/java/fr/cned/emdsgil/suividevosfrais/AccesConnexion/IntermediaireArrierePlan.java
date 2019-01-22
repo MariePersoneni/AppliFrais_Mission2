@@ -55,10 +55,20 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                     action = action;
                     try {
                         JSONArray outputJSON = new JSONArray(output);
-                        List<String[]> lignesfraisforfait = new ArrayList<String[]>();
+                        List<String[]> lesLignesFraisForfait = new ArrayList<String[]>();
                         for (int i = 0; i < outputJSON.length() ; i++){
-
+                            // utilisation d'une variable tableau intermédiaire
+                            JSONArray ligneFraisForfaitJSON = new JSONArray();
+                            ligneFraisForfaitJSON = outputJSON.getJSONArray(i);
+                            String[] ligneFraisForfait = new String[6];
+                            for (int j = 0 ; j < 6 ; j++){
+                                ligneFraisForfait[j] = ligneFraisForfaitJSON.getString(j);
+                            }
+                            lesLignesFraisForfait.add(ligneFraisForfait);
                         }
+                        lesLignesFraisForfait = lesLignesFraisForfait;
+                        //retour au controle
+                        controle.RetourRequete_getLesLignesFraisForfait(lesLignesFraisForfait);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

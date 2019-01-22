@@ -9,20 +9,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
+
+import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
 
 public class MenuActivity extends AppCompatActivity {
+
+    private Controle controle;
+    private List<String[]> lesLignesFraisForfait = new ArrayList<String[]>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         setTitle("GSB : Suivi des frais");
+        // récupère le controle
+        controle = Controle.getInstance(this);
         // récupère l'id du visiteur
         Intent intent = getIntent();
         String idVisiteur = intent.getStringExtra("idVisiteur");
-        // récupération des informations sérialisées
-        recupSerialize();
+        // récupération des informations sérialisées //recupSerialize();
+        // récupération des frais
+        controle.getLesLignesFraisForfait(idVisiteur);
         // chargement des méthodes événementielles
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdKm)), KmActivity.class, idVisiteur);
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHf)), HfActivity.class, idVisiteur);
@@ -94,5 +104,10 @@ public class MenuActivity extends AppCompatActivity {
                 // en construction
             }
         });
+    }
+
+    public void valoriseLesLignesFraisForfait(List<String[]> lesLignesFraisForfait) {
+        // valorise la propriété qui contient les lignes de frais
+        this.lesLignesFraisForfait = lesLignesFraisForfait;
     }
 }
