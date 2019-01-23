@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Locale;
@@ -28,16 +29,21 @@ public class NuiteeActivity extends AppCompatActivity {
     private String idVisiteur;
     private Visiteur leVisiteur;
     private List lesFraisDuVisiteur;
+    private LigneFraisForfait ligneEnCours;
+    private List lesFichesDeFraisDuVisiteur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuitee);
         controle = Controle.getInstance(this);
-        // récupération  du visiteur et de ses lignes de frais forfait
+        // récupération  du visiteur et de ses fiches de frais
         idVisiteur = Visiteur.getId();
         leVisiteur = Visiteur.getInstance(idVisiteur);
         lesFraisDuVisiteur = leVisiteur.getLesLignesFraisForfait();
+        lesFichesDeFraisDuVisiteur = leVisiteur.getLesFichesDeFrais();
+        // modification de l'affichage du DatePicker
+        Global.changeAfficheDate((DatePicker) findViewById(R.id.datNuitee), false) ;
         // initialisation des propriétés
         valoriseProprietes();
         // chargement des méthodes événementielles
@@ -81,7 +87,7 @@ public class NuiteeActivity extends AppCompatActivity {
          * Si une ligne existe on la place dans la variable
          * ligneEnCours
          */
-        LigneFraisForfait ligneEnCours = new LigneFraisForfait(idVisiteur,anneMois,"NUI","",0,0);
+        ligneEnCours = new LigneFraisForfait(idVisiteur,anneMois,"NUI","",0,0);
         if (lesFraisDuVisiteur.contains(ligneEnCours)){
             int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
             ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
@@ -107,13 +113,18 @@ public class NuiteeActivity extends AppCompatActivity {
     }
 
     /**
-     * Sur le clic du bouton valider : sérialisation
+     * Sur le clic du bouton valider : MAJ base de données
      */
     private void cmdValider_clic() {
         findViewById(R.id.cmdNuiteeValider).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 Serializer.serialize(Global.listFraisMois, NuiteeActivity.this) ;
                 retourActivityPrincipale() ;
+
+                // récuperation du numéro qui fait partie de la clé primaire et envoi de la quantité
+                Integer numero = ligneEnCours.getNumero();
+                String mois = ligneEnCours.getMois();
+                controle.MAJligneFraisForfait(idVisiteur, mois, numero.toString(), qte.toString() );
             }
         }) ;
     }

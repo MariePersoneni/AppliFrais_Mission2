@@ -32,7 +32,9 @@ public class MenuActivity extends AppCompatActivity {
         String idVisiteur = Visiteur.getId();
         leVisiteur = Visiteur.getInstance(idVisiteur);
         // récupération des frais du visiteur
+        //controle.getLesFichesDeFrais(idVisiteur);
         controle.getLesLignesFraisForfait(idVisiteur);
+        controle.getLesFichesDeFrais(idVisiteur);
         // chargement des méthodes événementielles
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdKm)), KmActivity.class, idVisiteur);
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHf)), HfActivity.class, idVisiteur);

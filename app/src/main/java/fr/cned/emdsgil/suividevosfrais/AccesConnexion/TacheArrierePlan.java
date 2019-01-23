@@ -26,7 +26,7 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
      * Fonction qui s'execute en arrière plan et qui retourne un résultat
      * Ici le résultat est la réponse du serveur
      *
-     * @param strings : tableau de paramètres, ici :
+     * @param parametres : tableau de paramètres, ici :
      *                param1 = login
      *                param2 = mdp
      *
@@ -34,18 +34,31 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
      * le cas échéant
      */
     @Override
-    protected String doInBackground(String... strings) {
-        action = strings[0];
+    protected String doInBackground(String... parametres) {
+        action = parametres[0];
         String param = "";
+        String idVisiteur;
         switch (action){
             case "getIdVisiteur" :
-                String login = strings[1];
-                String mdp = strings[2];
+                String login = parametres[1];
+                String mdp = parametres[2];
                 param = "action=readvisiteur&login=" + login + "&mdp=" + mdp;
                 break;
             case "getLignesFraisForfait" :
-                String idVisiteur = strings[1];
+                idVisiteur = parametres[1];
                 param = "action=readlignefraisforfait&idVisiteur=" + idVisiteur;
+                break;
+            case "MAJligneFraisForfait" :
+                idVisiteur = parametres[1];
+                String mois = parametres[2];
+                String numero = parametres[3];
+                String qte = parametres[4];
+                param = "action=MAJligneFraisForfait&idVisiteur=" + idVisiteur + "&mois=" + mois + "&numero=" + numero + "&qte=" + qte;
+                break;
+            case "getFichesDeFrais" :
+                idVisiteur = parametres[1];
+                param = "action=getFichesDeFrais&idVisiteur=" + idVisiteur;
+                break;
         }
         StringBuffer chaine = new StringBuffer("");
         try{

@@ -60,4 +60,11 @@ public class Controle {
         intermediaireArrierePlan.envoiDemandeFraisForfait(idVisiteur);
     }
 
+    public void MAJligneFraisForfait(String idVisiteur, String mois, String numero, String qte) {
+        intermediaireArrierePlan.envoiDemandeMAJligneFraisForfait(idVisiteur,mois,numero, qte);
+    }
+
+    public void getLesFichesDeFrais(String idVisiteur) {
+        intermediaireArrierePlan.envoiDemandeFicheFrais(idVisiteur);
+    }
 }
