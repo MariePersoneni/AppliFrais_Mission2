@@ -1,5 +1,7 @@
 package fr.cned.emdsgil.suividevosfrais.Donnees;
 
+import java.util.Objects;
+
 public class LigneFraisForfait{
 
     /**
@@ -22,5 +24,19 @@ public class LigneFraisForfait{
         this.mois = mois;
         this.numero = numero;
         this.quantite = quantite;
+    }
+
+    public String getMois() {
+        return mois;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        LigneFraisForfait ligne = (LigneFraisForfait)o;
+//        if (((LigneFraisForfait) o).getMois().equals("201901")){
+//            Boolean ok = true;
+//            ok = ok;
+//        }
+        return Objects.equals(mois, ((LigneFraisForfait) o).mois) && Objects.equals(idFraisForfait, ((LigneFraisForfait) o).idFraisForfait);
     }
 }

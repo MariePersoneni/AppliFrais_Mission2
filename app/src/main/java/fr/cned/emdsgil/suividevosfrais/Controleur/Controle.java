@@ -60,7 +60,4 @@ public class Controle {
         intermediaireArrierePlan.envoiDemandeFraisForfait(idVisiteur);
     }
 
-    public void RetourRequete_getLesLignesFraisForfait(List<String[]> lesLignesFraisForfait) {
-        ((MenuActivity)context).valoriseLesLignesFraisForfait(lesLignesFraisForfait);
-    }
 }

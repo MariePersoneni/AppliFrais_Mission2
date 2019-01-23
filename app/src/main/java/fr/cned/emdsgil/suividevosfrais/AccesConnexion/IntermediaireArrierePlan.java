@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
+import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisForfait;
+import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 
 public class IntermediaireArrierePlan implements AsyncResponse {
 
@@ -52,28 +54,55 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                 break;
             case "getLignesFraisForfait" :
                 if (output != null){
-                    action = action;
-                    try {
+                    try{
                         JSONArray outputJSON = new JSONArray(output);
-                        List<String[]> lesLignesFraisForfait = new ArrayList<String[]>();
-                        for (int i = 0; i < outputJSON.length() ; i++){
-                            // utilisation d'une variable tableau intermédiaire
+                        /**
+                         * récupère le visiteur et la liste de ses frais forfait
+                         */
+                        String idVisiteur = Visiteur.getId();
+                        Visiteur leVisiteur = Visiteur.getInstance(idVisiteur);
+                        List lesLignesFraisForfait = new ArrayList();
+                        /**
+                         * Parcours le tableau JSON chiffré : [0[a;b;c];1[a;b;c]]
+                         * i = 0 ; i = 1 ; i = 3...
+                         */
+                        for (int i = 0 ; i < outputJSON.length() ; i++){
                             JSONArray ligneFraisForfaitJSON = new JSONArray();
                             ligneFraisForfaitJSON = outputJSON.getJSONArray(i);
                             String[] ligneFraisForfait = new String[6];
+                            /**
+                             * Parcours le tableau JSON lettré : [0[a;b;c]...]
+                             * j = a ; j = b ; j = c...
+                             */
                             for (int j = 0 ; j < 6 ; j++){
                                 ligneFraisForfait[j] = ligneFraisForfaitJSON.getString(j);
                             }
-                            lesLignesFraisForfait.add(ligneFraisForfait);
+                            /**
+                             * création de l'objet lignedefraisforfait
+                             */
+                            String id = ligneFraisForfait[0];
+                            String mois = ligneFraisForfait[1];
+                            String idFraisForfait = ligneFraisForfait[2];
+                            String idFraisKm = ligneFraisForfait[3];
+                            int quantite = Integer.parseInt(ligneFraisForfait[4]);
+                            int numero = Integer.parseInt(ligneFraisForfait[5]);
+                            LigneFraisForfait ligne = new LigneFraisForfait(id,mois,idFraisForfait,idFraisKm,quantite,numero);
+                            /**
+                             * Ajout de cet objet lignedefraisforfait dans la collection
+                             * lesLignesFraisForfait
+                             */
+                            lesLignesFraisForfait.add(ligne);
                         }
-                        lesLignesFraisForfait = lesLignesFraisForfait;
-                        //retour au controle
-                        controle.RetourRequete_getLesLignesFraisForfait(lesLignesFraisForfait);
-                    } catch (JSONException e) {
+                        /**
+                         * valorisation de la collection du visiteur avec la
+                         * collection créée alimentée ci-dessus
+                         */
+                        leVisiteur.setLesLignesFraisForfait(lesLignesFraisForfait);
+                    } catch (JSONException e){
                         e.printStackTrace();
                     }
-                    break;
                 }
+                break;
         }
     }
 

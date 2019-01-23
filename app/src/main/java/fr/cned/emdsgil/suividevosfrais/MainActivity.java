@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
+import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 
 public class MainActivity extends AppCompatActivity {
     private Controle controle;
@@ -61,17 +62,19 @@ public class MainActivity extends AppCompatActivity {
      * Si le login et le mot de passe sont correct, la méthode appelle
      * l'activity de menu
      *
-     * @param resultat : vaut 1 si la récupération des données à echoué
-     *                 sinon resultat contient toutes les infos du visiteur
+     * @param idVisiteur : vaut 1 si la récupération des données à echoué
+     *                 sinon contient l'id du visiteur
      *
      */
-    public void afficheResultat(String resultat){
-        if (resultat.equals("1")){
+    public void afficheResultat(String idVisiteur){
+        if (idVisiteur.equals("1")){
             Toast.makeText(MainActivity.this, "Login / mdp incorrect", Toast.LENGTH_SHORT).show();
         } else {
             //Toast.makeText(MainActivity.this, "Connexion réussie :",Toast.LENGTH_SHORT).show();
+            // création du visiteur
+            Visiteur leVisiteur = new Visiteur(idVisiteur);
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-            intent.putExtra("idVisiteur",resultat);
+            // intent.putExtra("idVisiteur",idVisiteur);
             startActivity(intent);
         }
     }

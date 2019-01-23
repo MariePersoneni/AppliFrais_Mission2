@@ -14,11 +14,12 @@ import java.util.Hashtable;
 import java.util.List;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
+import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 
 public class MenuActivity extends AppCompatActivity {
 
     private Controle controle;
-    private List<String[]> lesLignesFraisForfait = new ArrayList<String[]>();
+    private Visiteur leVisiteur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +29,9 @@ public class MenuActivity extends AppCompatActivity {
         // récupère le controle
         controle = Controle.getInstance(this);
         // récupère l'id du visiteur
-        Intent intent = getIntent();
-        String idVisiteur = intent.getStringExtra("idVisiteur");
-        // récupération des informations sérialisées //recupSerialize();
-        // récupération des frais
+        String idVisiteur = Visiteur.getId();
+        leVisiteur = Visiteur.getInstance(idVisiteur);
+        // récupération des frais du visiteur
         controle.getLesLignesFraisForfait(idVisiteur);
         // chargement des méthodes événementielles
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdKm)), KmActivity.class, idVisiteur);
@@ -104,10 +104,5 @@ public class MenuActivity extends AppCompatActivity {
                 // en construction
             }
         });
-    }
-
-    public void valoriseLesLignesFraisForfait(List<String[]> lesLignesFraisForfait) {
-        // valorise la propriété qui contient les lignes de frais
-        this.lesLignesFraisForfait = lesLignesFraisForfait;
     }
 }

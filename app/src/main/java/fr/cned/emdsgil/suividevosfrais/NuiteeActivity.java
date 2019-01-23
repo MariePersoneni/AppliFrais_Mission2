@@ -12,9 +12,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.util.List;
 import java.util.Locale;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
+import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisForfait;
+import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 
 public class NuiteeActivity extends AppCompatActivity {
 
@@ -22,15 +25,19 @@ public class NuiteeActivity extends AppCompatActivity {
     private Integer mois;
     private Integer qte;
     private Controle controle;
+    private String idVisiteur;
+    private Visiteur leVisiteur;
+    private List lesFraisDuVisiteur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuitee);
         controle = Controle.getInstance(this);
-        // récupération de l'id du visiteur
-        Intent intent = getIntent();
-        String idVisiteur = intent.getStringExtra("idVisiteur");
+        // récupération  du visiteur et de ses lignes de frais forfait
+        idVisiteur = Visiteur.getId();
+        leVisiteur = Visiteur.getInstance(idVisiteur);
+        lesFraisDuVisiteur = leVisiteur.getLesLignesFraisForfait();
         // initialisation des propriétés
         valoriseProprietes();
     }
@@ -59,6 +66,22 @@ public class NuiteeActivity extends AppCompatActivity {
         mois = ((DatePicker)findViewById(R.id.datNuitee)).getMonth() + 1 ;
         // récupération de la qte correspondant au mois actuel
         qte = 0 ;
+
+        String numMois = mois.toString();
+        if (mois < 10) {
+            numMois = "0" + mois;
+        }
+        String anneMois = annee.toString() + numMois;
+        /**
+         * Recherche d'un frais existant pour cette periode
+         */
+        LigneFraisForfait ligneEnCours = new LigneFraisForfait(idVisiteur,anneMois,"NUI","",0,0);
+        if (lesFraisDuVisiteur.contains(ligneEnCours)){
+            int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
+            ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
+        }
+        ligneEnCours = ligneEnCours;
+
 //        Integer key = annee*100+mois ;
 //        if (Global.listFraisMois.containsKey(key)) {
 //            qte = Global.listFraisMois.get(key).getKm() ;
