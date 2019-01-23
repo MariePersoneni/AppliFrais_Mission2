@@ -40,6 +40,12 @@ public class NuiteeActivity extends AppCompatActivity {
         lesFraisDuVisiteur = leVisiteur.getLesLignesFraisForfait();
         // initialisation des propriétés
         valoriseProprietes();
+        // chargement des méthodes événementielles
+        imgReturn_clic() ;
+        cmdValider_clic() ;
+        cmdPlus_clic() ;
+        cmdMoins_clic() ;
+        dat_clic() ;
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,8 +70,6 @@ public class NuiteeActivity extends AppCompatActivity {
     private void valoriseProprietes() {
         annee = ((DatePicker)findViewById(R.id.datNuitee)).getYear() ;
         mois = ((DatePicker)findViewById(R.id.datNuitee)).getMonth() + 1 ;
-        // récupération de la qte correspondant au mois actuel
-        qte = 0 ;
 
         String numMois = mois.toString();
         if (mois < 10) {
@@ -74,19 +78,21 @@ public class NuiteeActivity extends AppCompatActivity {
         String anneMois = annee.toString() + numMois;
         /**
          * Recherche d'un frais existant pour cette periode
+         * Si une ligne existe on la place dans la variable
+         * ligneEnCours
          */
         LigneFraisForfait ligneEnCours = new LigneFraisForfait(idVisiteur,anneMois,"NUI","",0,0);
         if (lesFraisDuVisiteur.contains(ligneEnCours)){
             int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
             ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
         }
-        ligneEnCours = ligneEnCours;
 
-//        Integer key = annee*100+mois ;
-//        if (Global.listFraisMois.containsKey(key)) {
-//            qte = Global.listFraisMois.get(key).getKm() ;
-//        }
-//        ((EditText)findViewById(R.id.txtKm)).setText(String.format(Locale.FRANCE, "%d", qte)) ;
+        /**
+         * Récupération de la quantité de la ligne en cours
+         * puis affichage
+         */
+        qte = ligneEnCours.getQuantite();
+        ((EditText)findViewById(R.id.txtNuitee)).setText(qte.toString());
     }
 
     /**
@@ -113,25 +119,25 @@ public class NuiteeActivity extends AppCompatActivity {
     }
 
     /**
-     * Sur le clic du bouton plus : ajout de 10 dans la quantité
+     * Sur le clic du bouton plus : ajout de 1 dans la quantité
      */
     private void cmdPlus_clic() {
         findViewById(R.id.cmdNuiteePlus).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                qte+=10 ;
-                enregNewQte() ;
+                qte+=1 ;
+                ((EditText)findViewById(R.id.txtNuitee)).setText(qte.toString());
             }
         }) ;
     }
 
     /**
-     * Sur le clic du bouton moins : enlève 10 dans la quantité si c'est possible
+     * Sur le clic du bouton moins : enlève 1 dans la quantité si c'est possible
      */
     private void cmdMoins_clic() {
         findViewById(R.id.cmdNuiteeMoins).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                qte = Math.max(0, qte-10) ; // suppression de 10 si possible
-                enregNewQte() ;
+                qte = Math.max(0, qte-1) ; // suppression de 10 si possible
+                ((EditText)findViewById(R.id.txtNuitee)).setText(qte.toString());
             }
         }) ;
     }

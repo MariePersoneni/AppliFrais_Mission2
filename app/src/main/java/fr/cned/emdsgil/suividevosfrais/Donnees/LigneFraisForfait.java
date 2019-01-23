@@ -30,6 +30,10 @@ public class LigneFraisForfait{
         return mois;
     }
 
+    public int getQuantite() {
+        return quantite;
+    }
+
     @Override
     public boolean equals(Object o) {
         LigneFraisForfait ligne = (LigneFraisForfait)o;
