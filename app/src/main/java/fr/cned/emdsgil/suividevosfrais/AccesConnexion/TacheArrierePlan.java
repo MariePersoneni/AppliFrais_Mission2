@@ -12,6 +12,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import fr.cned.emdsgil.suividevosfrais.AccesConnexion.AsyncResponse;
+import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
 
 public class TacheArrierePlan extends AsyncTask<String, Void, String> {
 
@@ -19,15 +20,12 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
     private String action = null;
 
     /**
-     * Fonction qui s'execute en arrière plan et qui retourne un résultat
-     * Ici le résultat est la réponse du serveur
+     * Fonction qui s'execute en arrière plan, elle lance une requête
+     * de connexion avec des paramètres différents selon l'action
      *
-     * @param parametres : tableau de paramètres, ici :
-     *                param1 = login
-     *                param2 = mdp
-     *
-     * @return le résultat de la requête si la connexion a réussi ou null
-     * le cas échéant
+     * @param parametres = le 1er paramètre contient toujours le
+     *                   nom de l'action à réaliser
+     * @return le résultat de la requete sous forme d'objet ou de tableau JSON
      */
     @Override
     protected String doInBackground(String... parametres) {
@@ -35,23 +33,23 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
         String param = "";
         String idVisiteur;
         switch (action){
-            case "getIdVisiteur" :
+            case Controle.GET_ID_VISITEUR :
                 String login = parametres[1];
                 String mdp = parametres[2];
                 param = "action=readvisiteur&login=" + login + "&mdp=" + mdp;
                 break;
-            case "getLignesFraisForfait" :
+            case Controle.GET_LIGNE_FRAIS_FORFAIT :
                 idVisiteur = parametres[1];
                 param = "action=getLignesFraisForfait&idVisiteur=" + idVisiteur;
                 break;
-            case "MAJligneFraisForfait" :
+            case Controle.MAJ_LIGNE_FRAIS_FORFAIT :
                 idVisiteur = parametres[1];
                 String mois = parametres[2];
                 String numero = parametres[3];
                 String qte = parametres[4];
                 param = "action=MAJligneFraisForfait&idVisiteur=" + idVisiteur + "&mois=" + mois + "&numero=" + numero + "&qte=" + qte;
                 break;
-            case "getFichesDeFrais" :
+            case Controle.GET_FICHES_FRAIS :
                 idVisiteur = parametres[1];
                 param = "action=getFichesDeFrais&idVisiteur=" + idVisiteur;
                 break;
@@ -68,7 +66,7 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
             connection.setRequestProperty("charset","utf-8"); // propriété de la requête : charset = UTF-8
 
             try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())){
-                wr.write(postData); // envoi de la requête
+                wr.write(postData); // envoiDemandeConnexion de la requête
             }
 
             connection.connect(); // connexion
@@ -94,13 +92,14 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
      * Méthode qui reçoit le résultat de la méthode doIBackground
      * ci-dessus.
      * Le delegate a été instancié par la classe IntermediaireArrierePlan
-     * dans sa méthode envoi utilisée auparavant. Il appelle la méthode
-     * processFinish de la classe IntermediaireArrierePlan.
+     * dans sa méthode envoiDemandeConnexion utilisée auparavant. Il appelle la méthode
+     * processFinish de la classe IntermediaireArrierePlan et lui transmet l'action en cours.
      *
-     * @param s = le résultat de la requête envoyée par doInBackground
+     * @param resulatRequête = le résultat de la requête envoyée par doInBackground, il est
+     *                       au  format JSON.
      */
     @Override
-    protected void onPostExecute(String s){
-        delegate.processFinish(s, action);
+    protected void onPostExecute(String resulatRequête){
+        delegate.processFinish(resulatRequête, action);
     }
 }

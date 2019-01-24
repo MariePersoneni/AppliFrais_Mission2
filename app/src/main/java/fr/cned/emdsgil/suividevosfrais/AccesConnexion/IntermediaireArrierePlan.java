@@ -14,23 +14,24 @@ import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 
 public class IntermediaireArrierePlan implements AsyncResponse {
 
+    /**
+     * Propriétés
+     */
     private Controle controle;
     private TacheArrierePlan tacheArrierePlan;
 
-    public IntermediaireArrierePlan(){
-        controle = Controle.getInstance(null);
-    };
-
-//    @Override
-//    public void processFinish(String output) {
-//    }
+    /**
+     * Constructeur qui récupère le contrôle
+     */
+    public IntermediaireArrierePlan(){ controle = Controle.getInstance(null); }
 
     /**
-     * Méthode qui permet de récupérer le résultat de la
-     * requête gérée par TacheArrièrePlan et de la transmettre
-     * au controleur.
+     * Méthode qui permet de récupérer et de traiter le résultat
+     * de la requête gérée par TacheArrièrePlan selon l'action en
+     * cours, récuperée en paramètre
      *
-     * @param output résultat de la requête
+     * @param output = résultat de la requête
+     * @param action = action en cours
      */
     @Override
     public void processFinish(String output, String action) {
@@ -41,7 +42,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
             /**
              * Réception de l'id du Visiteur
              */
-            case "getIdVisiteur" :
+            case Controle.GET_ID_VISITEUR :
                 if (!output.equals("1")){
                     // output = idVisiteur
                     try {
@@ -60,42 +61,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
             /**
              * Reception des lignes de frais forfait
              */
-            case "getLignesFraisForfait" :
-//                if (output != null){
-//                    try{
-//                        JSONArray outputJSON = new JSONArray(output);
-//                        //récupère le visiteur et la liste de ses frais forfait
-//                        String idVisiteur = Visiteur.getId();
-//                        Visiteur leVisiteur = Visiteur.getInstance(idVisiteur);
-//                        List lesLignesFraisForfait = new ArrayList();
-//                         // Parcours le tableau JSON chiffré : [0[a;b;c];1[a;b;c]]
-//                         // i = 0 ; i = 1 ; i = 3...
-//                        for (int i = 0 ; i < outputJSON.length() ; i++){
-//                            JSONArray ligneFraisForfaitJSON = new JSONArray();
-//                            ligneFraisForfaitJSON = outputJSON.getJSONArray(i);
-//                            String[] ligneFraisForfait = new String[6];
-//                             // Parcours le tableau JSON lettré : [0[a;b;c]...]
-//                             // j = a ; j = b ; j = c...
-//                            for (int j = 0 ; j < 6 ; j++){
-//                                ligneFraisForfait[j] = ligneFraisForfaitJSON.getString(j);
-//                            }
-//                             // création de l'objet lignedefraisforfait
-//                            String id = ligneFraisForfait[0];
-//                            String mois = ligneFraisForfait[1];
-//                            String idFraisForfait = ligneFraisForfait[2];
-//                            String idFraisKm = ligneFraisForfait[3];
-//                            int quantite = Integer.parseInt(ligneFraisForfait[4]);
-//                            int numero = Integer.parseInt(ligneFraisForfait[5]);
-//                            LigneFraisForfait ligne = new LigneFraisForfait(id,mois,idFraisForfait,idFraisKm,quantite,numero);
-//                            // Ajout de cet objet lignedefraisforfait dans la collection lesLignesFraisForfait
-//                            lesLignesFraisForfait.add(ligne);
-//                        }
-//                         // valorisation de la collection du visiteur avec la collection créée alimentée ci-dessus
-//                        leVisiteur.setLesLignesFraisForfait(lesLignesFraisForfait);
-//                    } catch (JSONException e){
-//                        e.printStackTrace();
-//                    }
-//                }
+            case Controle.GET_LIGNE_FRAIS_FORFAIT :
                 // récupération des fiches
                 List lesLignesFraisForfait = new ArrayList<LigneFraisForfait>();
                 lesLignesFraisForfait = receptionTableauJSON(output,"LigneFraisForfait", 6);
@@ -107,7 +73,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
             /**
              * Récuperation des fiches de frais du visiteur
              */
-            case "getFichesDeFrais":
+            case Controle.GET_FICHES_FRAIS :
                 // récupération des fiches
                 List lesFiches = new ArrayList<FicheFrais>();
                 lesFiches = receptionTableauJSON(output,"FicheFrais", 2);
@@ -119,13 +85,17 @@ public class IntermediaireArrierePlan implements AsyncResponse {
         }
     }
 
-    private List receptionTableauJSON(String output, String typeCollection, int tailleColection){
-        if (output != null){
+    /**
+     * Fonction qui transforme un tableau JSON au format List<>
+     * @param tableauJSON = le tableau à transformer
+     * @param typeCollection = type de la liste (FicheFrais, LigneFraisForfait)
+     * @param tailleColection = nombre de champ qui composent les lignes de la liste
+     * @return une liste d'objets du type passé en paramètre
+     */
+    private List receptionTableauJSON(String tableauJSON, String typeCollection, int tailleColection){
+        if (tableauJSON != null){
             try{
-                JSONArray maitreJSON = new JSONArray(output);
-                //récupère le visiteur et la liste de ses frais forfait
-//                String idVisiteur = Visiteur.getId();
-//                Visiteur leVisiteur = Visiteur.getInstance(idVisiteur);
+                JSONArray maitreJSON = new JSONArray(tableauJSON);
                 List tableauMaitre = new ArrayList();
                 // Parcours le tableau JSON chiffré : [0[a;b;c];1[a;b;c]]
                 // i = 0 ; i = 1 ; i = 3...
@@ -140,6 +110,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                     }
                     // création de l'objet selon le type de Frais
                     String mois = null;
+                    Object ligne = null;
                     switch (typeCollection){
                         case "LigneFraisForfait":
                             String id = sousTableau[0];
@@ -149,24 +120,18 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                             int quantite = Integer.parseInt(sousTableau[4]);
                             int numero = Integer.parseInt(sousTableau[5]);
                             LigneFraisForfait ligneFrais = new LigneFraisForfait(id,mois,idFraisForfait,idFraisKm,quantite,numero);
-                            tableauMaitre.add(ligneFrais);
-
+                            ligne = new LigneFraisForfait(id,mois,idFraisForfait,idFraisKm,quantite,numero);
                             break;
                         case "FicheFrais" :
                             mois = sousTableau[0];
                             String etat = sousTableau[1];
                             FicheFrais ligneFiche = new FicheFrais(mois, etat);
-                            tableauMaitre.add(ligneFiche);
-
+                            ligne = new FicheFrais(mois, etat);
                             break;
                     }
-                    
-                    // Ajout de cet objet lignedefraisforfait dans la collection tableauMaitre
-                    // tableauMaitre.add(ligne);
+                     //Ajout de cet objet lignedefraisforfait dans la collection tableauMaitre
+                     tableauMaitre.add(ligne);
                 }
-                // valorisation de la collection du visiteur avec la collection créée alimentée ci-dessus
-                //leVisiteur.setLesLignesFraisForfait(tableauMaitre);
-                // retourne le tableau maitre
                 return tableauMaitre;
             } catch (JSONException e){
                 e.printStackTrace();
@@ -175,35 +140,35 @@ public class IntermediaireArrierePlan implements AsyncResponse {
         return null;
     }
 
-    /**
-     * Méthode qui créé un objet TacheArrierePlan et lui demande
-     * d'executer la requete de connexion.
-     *
-     * @param login : récupéré dans txtLogin de MainActivity
-     * @param mdp : récupéré dans txtMdp de MainActivity
-     */
-    public void envoi(String login, String mdp){
+    /************************************************************************
+     * METHODES DE CONNEXION
+     * Ces méthodes créent un objet TacheArrierePlan et
+     * lui demande d'executer la connexion
+     ************************************************************************/
+    public void envoiDemandeConnexion(String login, String mdp){
         tacheArrierePlan = new TacheArrierePlan();
         tacheArrierePlan.delegate = this;
-        tacheArrierePlan.execute("getIdVisiteur",login, mdp);
+        tacheArrierePlan.execute(Controle.GET_ID_VISITEUR,login, mdp);
     }
 
     public void envoiDemandeFraisForfait(String idVisiteur) {
         tacheArrierePlan = new TacheArrierePlan();
         tacheArrierePlan.delegate = this;
-        tacheArrierePlan.execute("getLignesFraisForfait", idVisiteur);
+        tacheArrierePlan.execute(Controle.GET_LIGNE_FRAIS_FORFAIT, idVisiteur);
     }
 
     public void envoiDemandeMAJligneFraisForfait(String idVisiteur, String mois, String numero, String qte) {
         tacheArrierePlan = new TacheArrierePlan();
         tacheArrierePlan.delegate = this;
         String num = numero.toString();
-        tacheArrierePlan.execute("MAJligneFraisForfait", idVisiteur, mois,numero, qte);
+        tacheArrierePlan.execute(Controle.MAJ_LIGNE_FRAIS_FORFAIT, idVisiteur, mois,numero, qte);
     }
 
     public void envoiDemandeFicheFrais(String idVisiteur) {
         tacheArrierePlan = new TacheArrierePlan();
         tacheArrierePlan.delegate = this;
-        tacheArrierePlan.execute("getFichesDeFrais", idVisiteur);
+        tacheArrierePlan.execute(Controle.GET_FICHES_FRAIS, idVisiteur);
     }
+    /************************************************************************
+     ************************************************************************/
 }

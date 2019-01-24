@@ -2,13 +2,21 @@ package fr.cned.emdsgil.suividevosfrais.Controleur;
 
 import android.content.Context;
 
-import java.util.List;
-
 import fr.cned.emdsgil.suividevosfrais.AccesConnexion.IntermediaireArrierePlan;
 import fr.cned.emdsgil.suividevosfrais.MainActivity;
-import fr.cned.emdsgil.suividevosfrais.MenuActivity;
 
 public class Controle {
+    /**
+     * Constantes
+     */
+    public final static String GET_ID_VISITEUR = "getIdVisiteur";
+    public final static String GET_LIGNE_FRAIS_FORFAIT = "getLignesFraisForfait";
+    public final  static String GET_FICHES_FRAIS = "getFichesDeFrais";
+    public final static String MAJ_LIGNE_FRAIS_FORFAIT = "MAJligneFraisForfait";
+
+    /**
+     * Propriétés
+     */
     private static Controle instance = null;
     private static Context context;
     private static IntermediaireArrierePlan intermediaireArrierePlan;
@@ -44,12 +52,12 @@ public class Controle {
      * @param mdp
      */
     public void lanceRequete(String login, String mdp){
-        intermediaireArrierePlan.envoi(login, mdp);
+        intermediaireArrierePlan.envoiDemandeConnexion(login, mdp);
     }
 
     /**
      * Méthode qui récupère le résultat de la requête de la part de
-     * l'intermédiaire et qui l'envoi à la page de connexion (MainActivity)
+     * l'intermédiaire et qui l'envoiDemandeConnexion à la page de connexion (MainActivity)
      * @param s
      */
     public void RetourRequete_getIdVisiteur(String s){

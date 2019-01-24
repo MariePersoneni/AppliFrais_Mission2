@@ -102,7 +102,7 @@ public class MenuActivity extends AppCompatActivity {
     private void cmdTransfert_clic() {
         findViewById(R.id.cmdTransfert).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                // envoi les informations sérialisées vers le serveur
+                // envoiDemandeConnexion les informations sérialisées vers le serveur
                 // en construction
             }
         });

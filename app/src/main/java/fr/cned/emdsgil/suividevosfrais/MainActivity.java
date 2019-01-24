@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         ((Button)findViewById(R.id.btnConnexion)).setOnClickListener(new Button.OnClickListener(){
             /**
              * Méthode qui définit l'action à réaliser quand on clique sur le bouton de connexion
-             * Ici elle lance la requête de demande de connexion au serveur et envoi en paramètres
+             * Ici elle lance la requête de demande de connexion au serveur et envoiDemandeConnexion en paramètres
              * le login et le mot de passe saisis
              *
              * @param v = btnConnexion

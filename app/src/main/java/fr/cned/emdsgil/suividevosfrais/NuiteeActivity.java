@@ -121,7 +121,7 @@ public class NuiteeActivity extends AppCompatActivity {
                 Serializer.serialize(Global.listFraisMois, NuiteeActivity.this) ;
                 retourActivityPrincipale() ;
 
-                // récuperation du numéro qui fait partie de la clé primaire et envoi de la quantité
+                // récuperation du numéro qui fait partie de la clé primaire et envoiDemandeConnexion de la quantité
                 Integer numero = ligneEnCours.getNumero();
                 String mois = ligneEnCours.getMois();
                 controle.MAJligneFraisForfait(idVisiteur, mois, numero.toString(), qte.toString() );
