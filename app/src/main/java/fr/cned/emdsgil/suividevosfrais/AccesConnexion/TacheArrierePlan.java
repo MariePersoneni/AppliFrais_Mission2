@@ -18,10 +18,6 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
     public AsyncResponse delegate=null;
     private String action = null;
 
-    public String getAction() {
-        return action;
-    }
-
     /**
      * Fonction qui s'execute en arrière plan et qui retourne un résultat
      * Ici le résultat est la réponse du serveur
@@ -46,7 +42,7 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
                 break;
             case "getLignesFraisForfait" :
                 idVisiteur = parametres[1];
-                param = "action=readlignefraisforfait&idVisiteur=" + idVisiteur;
+                param = "action=getLignesFraisForfait&idVisiteur=" + idVisiteur;
                 break;
             case "MAJligneFraisForfait" :
                 idVisiteur = parametres[1];
@@ -105,6 +101,6 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
      */
     @Override
     protected void onPostExecute(String s){
-        delegate.processFinish(s);
+        delegate.processFinish(s, action);
     }
 }

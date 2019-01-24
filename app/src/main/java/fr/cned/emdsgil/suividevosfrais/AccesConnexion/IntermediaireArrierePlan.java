@@ -21,6 +21,10 @@ public class IntermediaireArrierePlan implements AsyncResponse {
         controle = Controle.getInstance(null);
     };
 
+//    @Override
+//    public void processFinish(String output) {
+//    }
+
     /**
      * Méthode qui permet de récupérer le résultat de la
      * requête gérée par TacheArrièrePlan et de la transmettre
@@ -29,8 +33,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
      * @param output résultat de la requête
      */
     @Override
-    public void processFinish(String output) {
-        String action = tacheArrierePlan.getAction();
+    public void processFinish(String output, String action) {
         // init variables réccurrentes
         String idVisiteur;
         Visiteur leVisiteur;
@@ -136,7 +139,6 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                         sousTableau[j] = sousTableauJSON.getString(j);
                     }
                     // création de l'objet selon le type de Frais
-                    Object ligne = null;
                     String mois = null;
                     switch (typeCollection){
                         case "LigneFraisForfait":
@@ -146,17 +148,21 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                             String idFraisKm = sousTableau[3];
                             int quantite = Integer.parseInt(sousTableau[4]);
                             int numero = Integer.parseInt(sousTableau[5]);
-                            ligne = new LigneFraisForfait(id,mois,idFraisForfait,idFraisKm,quantite,numero);
+                            LigneFraisForfait ligneFrais = new LigneFraisForfait(id,mois,idFraisForfait,idFraisKm,quantite,numero);
+                            tableauMaitre.add(ligneFrais);
+
                             break;
                         case "FicheFrais" :
                             mois = sousTableau[0];
                             String etat = sousTableau[1];
-                            ligne = new FicheFrais(mois, etat);
+                            FicheFrais ligneFiche = new FicheFrais(mois, etat);
+                            tableauMaitre.add(ligneFiche);
+
                             break;
                     }
                     
                     // Ajout de cet objet lignedefraisforfait dans la collection tableauMaitre
-                    tableauMaitre.add(ligne);
+                    // tableauMaitre.add(ligne);
                 }
                 // valorisation de la collection du visiteur avec la collection créée alimentée ci-dessus
                 //leVisiteur.setLesLignesFraisForfait(tableauMaitre);
