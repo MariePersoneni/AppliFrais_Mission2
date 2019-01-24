@@ -1,5 +1,7 @@
 package fr.cned.emdsgil.suividevosfrais.Donnees;
 
+import java.util.Objects;
+
 public class FicheFrais {
     /**
      * Propriétés
@@ -16,4 +18,18 @@ public class FicheFrais {
         this.etat = etat;
         this.idVisiteur = Visiteur.getId();
     }
+
+    /**
+     * Redéfinition de la méthode equals() de la classe Object
+     * Filtre uniquement sur le mois
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean equals(Object o) {
+        FicheFrais ligne = (FicheFrais) o;
+        return Objects.equals(mois, ((FicheFrais) o).mois);
+    }
+
+    public String getEtat() { return etat; }
 }

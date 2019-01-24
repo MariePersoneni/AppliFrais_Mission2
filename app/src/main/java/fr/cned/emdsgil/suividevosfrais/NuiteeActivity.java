@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
+import fr.cned.emdsgil.suividevosfrais.Donnees.FicheFrais;
 import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisForfait;
 import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 
@@ -31,6 +32,7 @@ public class NuiteeActivity extends AppCompatActivity {
     private List lesFraisDuVisiteur;
     private LigneFraisForfait ligneEnCours;
     private List lesFichesDeFraisDuVisiteur;
+    private FicheFrais ficheEnCours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,27 +78,28 @@ public class NuiteeActivity extends AppCompatActivity {
     private void valoriseProprietes() {
         annee = ((DatePicker)findViewById(R.id.datNuitee)).getYear() ;
         mois = ((DatePicker)findViewById(R.id.datNuitee)).getMonth() + 1 ;
-
         String numMois = mois.toString();
         if (mois < 10) {
             numMois = "0" + mois;
         }
         String anneMois = annee.toString() + numMois;
-        /**
-         * Recherche d'un frais existant pour cette periode
-         * Si une ligne existe on la place dans la variable
-         * ligneEnCours
-         */
+        // Recherche d'une fiche de frais pour ce mois
+        ficheEnCours = new FicheFrais(anneMois,"");
+        if (lesFichesDeFraisDuVisiteur.contains(ficheEnCours)){
+            int index = lesFichesDeFraisDuVisiteur.indexOf(ficheEnCours);
+            ficheEnCours = (FicheFrais) lesFichesDeFraisDuVisiteur.get(index);
+        } else {
+            // TO DO
+        }
+        /* Recherche d'une ligne de frais existante pour cette periode
+         * Si une ligne existe on la place dans la variable ligneEnCours */
         ligneEnCours = new LigneFraisForfait(idVisiteur,anneMois,"NUI","",0,0);
         if (lesFraisDuVisiteur.contains(ligneEnCours)){
             int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
             ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
         }
-
-        /**
-         * Récupération de la quantité de la ligne en cours
-         * puis affichage
-         */
+        /* Récupération de la quantité de la ligne en cours
+         * puis affichage*/
         qte = ligneEnCours.getQuantite();
         ((EditText)findViewById(R.id.txtNuitee)).setText(qte.toString());
     }
@@ -135,8 +138,12 @@ public class NuiteeActivity extends AppCompatActivity {
     private void cmdPlus_clic() {
         findViewById(R.id.cmdNuiteePlus).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                qte+=1 ;
-                ((EditText)findViewById(R.id.txtNuitee)).setText(qte.toString());
+                if (!ficheEnCours.getEtat().equals("CR")){
+                    Toast.makeText(NuiteeActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
+                }else {
+                    qte += 1;
+                    ((EditText) findViewById(R.id.txtNuitee)).setText(qte.toString());
+                }
             }
         }) ;
     }
@@ -147,8 +154,12 @@ public class NuiteeActivity extends AppCompatActivity {
     private void cmdMoins_clic() {
         findViewById(R.id.cmdNuiteeMoins).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                qte = Math.max(0, qte-1) ; // suppression de 10 si possible
-                ((EditText)findViewById(R.id.txtNuitee)).setText(qte.toString());
+                if (!ficheEnCours.getEtat().equals("CR")){
+                    Toast.makeText(NuiteeActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
+                }else {
+                    qte = Math.max(0, qte - 1); // suppression de 10 si possible
+                    ((EditText) findViewById(R.id.txtNuitee)).setText(qte.toString());
+                }
             }
         }) ;
     }
@@ -162,6 +173,9 @@ public class NuiteeActivity extends AppCompatActivity {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 valoriseProprietes() ;
+                // on/off bouton valider selon l'état de la fiche en cours
+                if (!ficheEnCours.getEtat().equals("CR")) ((Button)findViewById(R.id.cmdNuiteeValider)).setEnabled(false);
+                else ((Button)findViewById(R.id.cmdNuiteeValider)).setEnabled(true);
             }
         });
     }
