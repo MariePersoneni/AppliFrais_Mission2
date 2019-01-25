@@ -26,8 +26,9 @@ import fr.cned.emdsgil.suividevosfrais.Outils.Fonctions;
 
 public class NuiteeActivity extends AppCompatActivity {
 
-    private Integer annee;
-    private Integer mois;
+    /**
+     * propriétés
+     */
     private Integer qte;
     private Controle controle;
     private String idVisiteur;
@@ -45,10 +46,7 @@ public class NuiteeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nuitee);
         controle = Controle.getInstance(this);
         // récupération  du visiteur et de ses fiches de frais
-        idVisiteur = Visiteur.getId();
-        leVisiteur = Visiteur.getInstance(idVisiteur);
-        lesFraisDuVisiteur = leVisiteur.getLesLignesFraisForfait();
-        lesFichesDeFraisDuVisiteur = leVisiteur.getLesFichesDeFrais();
+        initVisiteur();
         // modification de l'affichage du DatePicker
         Global.changeAfficheDate((DatePicker) findViewById(R.id.datNuitee), false) ;
         // initialisation des propriétés
@@ -60,6 +58,17 @@ public class NuiteeActivity extends AppCompatActivity {
         cmdMoins_clic() ;
         dat_clic() ;
     }
+
+    /**
+     * Valorise les propriétés liées au visiteur
+     */
+    private void initVisiteur() {
+        idVisiteur = Visiteur.getId();
+        leVisiteur = Visiteur.getInstance(idVisiteur);
+        lesFraisDuVisiteur = leVisiteur.getLesLignesFraisForfait();
+        lesFichesDeFraisDuVisiteur = leVisiteur.getLesFichesDeFrais();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -81,30 +90,13 @@ public class NuiteeActivity extends AppCompatActivity {
      * Valorisation des propriétés avec les informations affichées
      */
     private void valoriseProprietes() {
-        annee = ((DatePicker)findViewById(R.id.datNuitee)).getYear() ;
-        mois = ((DatePicker)findViewById(R.id.datNuitee)).getMonth() + 1 ;
+        Integer annee = ((DatePicker)findViewById(R.id.datNuitee)).getYear() ;
+        Integer mois = ((DatePicker)findViewById(R.id.datNuitee)).getMonth() + 1 ;
         String numMois = mois.toString();
         if (mois < 10) {
             numMois = "0" + mois;
         }
         anneeMois = annee.toString() + numMois;
-        // Recherche d'une fiche de frais pour ce mois
-//        ficheEnCours = new FicheFrais(anneeMois,"");
-//        if (lesFichesDeFraisDuVisiteur.contains(ficheEnCours)){
-//            int index = lesFichesDeFraisDuVisiteur.indexOf(ficheEnCours);
-//            ficheEnCours = (FicheFrais) lesFichesDeFraisDuVisiteur.get(index);
-//        } else {
-//            // TO DO
-//        }
-        /* Recherche d'une ligne de frais existante pour cette periode
-         * Si une ligne existe on la place dans la variable ligneEnCours */
-//        ligneEnCours = new LigneFraisForfait(idVisiteur, anneeMois,"NUI","",0,0);
-//        if (lesFraisDuVisiteur.contains(ligneEnCours)){
-//            int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
-//            ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
-//        }
-        /* Récupération de la quantité de la ligne en cours
-         * puis affichage*/
         ficheEnCours = getLaFicheEnCours();
         ligneEnCours = getLaligneEnCours();
         qte = ligneEnCours.getQuantite();
@@ -128,7 +120,6 @@ public class NuiteeActivity extends AppCompatActivity {
     private void cmdValider_clic() {
         findViewById(R.id.cmdNuiteeValider).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //Serializer.serialize(Global.listFraisMois, NuiteeActivity.this) ;
                 // fiche inexistante : vérif si date saisie = mois en cours
                 if (Fonctions.estMoisActuel(anneeMois)){
                     controle.creerFicheFrais(idVisiteur, anneeMois, Fonctions.getMoisPrecedent(anneeMois));
@@ -190,21 +181,6 @@ public class NuiteeActivity extends AppCompatActivity {
     }
 
     /**
-     * Enregistrement dans la zone de texte et dans la liste de la nouvelle qte, à la date choisie
-     */
-    private void enregNewQte() {
-        // enregistrement dans la zone de texte
-        ((EditText)findViewById(R.id.txtNuitee)).setText(String.format(Locale.FRANCE, "%d", qte)) ;
-        // enregistrement dans la liste
-        Integer key = annee*100+mois ;
-        if (!Global.listFraisMois.containsKey(key)) {
-            // creation du mois et de l'annee s'ils n'existent pas déjà
-            Global.listFraisMois.put(key, new FraisMois(annee, mois)) ;
-        }
-        Global.listFraisMois.get(key).setKm(qte) ;
-    }
-
-    /**
      * Retour à l'activité principale (le menu)
      */
     private void retourActivityPrincipale() {
@@ -212,11 +188,18 @@ public class NuiteeActivity extends AppCompatActivity {
         startActivity(intent) ;
     }
 
+    /**
+     * Actualise les collections du visiteur
+     * @param idVisiteur
+     */
     private void actualiseFraisVisiteur(String idVisiteur){
         controle.getLesFichesDeFrais(idVisiteur);
         controle.getLesLignesFraisForfait(idVisiteur);
     }
 
+    /**
+     * Retourne la fiche de frais qui correspond à la date affichée
+     */
     private FicheFrais getLaFicheEnCours(){
         ficheEnCours = new FicheFrais(anneeMois,"");
         if (lesFichesDeFraisDuVisiteur.contains(ficheEnCours)){
@@ -228,6 +211,9 @@ public class NuiteeActivity extends AppCompatActivity {
         return ficheEnCours;
     }
 
+    /**
+     * Retourne la ligne de frais qui correspond à la date affichée et au type de frais selectionné
+     */
     private LigneFraisForfait getLaligneEnCours(){
         ligneEnCours = new LigneFraisForfait(idVisiteur, anneeMois,"NUI","",0,numero);
         if (lesFraisDuVisiteur.contains(ligneEnCours)){
