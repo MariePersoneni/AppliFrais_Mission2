@@ -13,10 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
 import fr.cned.emdsgil.suividevosfrais.Donnees.FicheFrais;
@@ -39,6 +36,7 @@ public class NuiteeActivity extends AppCompatActivity {
     private FicheFrais ficheEnCours;
     private String anneeMois;
     private static String numero = "2";
+    private static String idFrais = "NUI";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +95,8 @@ public class NuiteeActivity extends AppCompatActivity {
             numMois = "0" + mois;
         }
         anneeMois = annee.toString() + numMois;
-        ficheEnCours = getLaFicheEnCours();
-        ligneEnCours = getLaligneEnCours();
+        getLaFicheEnCours();
+        getLaligneEnCours();
         qte = ligneEnCours.getQuantite();
         ((EditText)findViewById(R.id.txtNuitee)).setText(qte.toString());
     }
@@ -200,26 +198,22 @@ public class NuiteeActivity extends AppCompatActivity {
     /**
      * Retourne la fiche de frais qui correspond à la date affichée
      */
-    private FicheFrais getLaFicheEnCours(){
+    private void getLaFicheEnCours(){
         ficheEnCours = new FicheFrais(anneeMois,"");
         if (lesFichesDeFraisDuVisiteur.contains(ficheEnCours)){
             int index = lesFichesDeFraisDuVisiteur.indexOf(ficheEnCours);
             ficheEnCours = (FicheFrais) lesFichesDeFraisDuVisiteur.get(index);
-        } else {
-            // TO DO
         }
-        return ficheEnCours;
     }
 
     /**
      * Retourne la ligne de frais qui correspond à la date affichée et au type de frais selectionné
      */
-    private LigneFraisForfait getLaligneEnCours(){
-        ligneEnCours = new LigneFraisForfait(idVisiteur, anneeMois,"NUI","",0,numero);
+    private void getLaligneEnCours(){
+        ligneEnCours = new LigneFraisForfait(anneeMois,idFrais,"",0,numero);
         if (lesFraisDuVisiteur.contains(ligneEnCours)){
             int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
             ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
         }
-        return ligneEnCours;
     }
 }

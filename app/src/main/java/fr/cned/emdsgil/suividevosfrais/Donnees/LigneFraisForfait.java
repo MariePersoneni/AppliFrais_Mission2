@@ -17,10 +17,10 @@ public class LigneFraisForfait{
     /**
      * Constructeur qui valorise les propriétés privées
      */
-    public LigneFraisForfait(String idvisiteur, String mois, String idFraisForfait, String idFraisKm, int quantite, String numero){
+    public LigneFraisForfait(String mois, String idFraisForfait, String idFraisKm, int quantite, String numero){
         this.idFraisForfait = idFraisForfait;
         this.idFraisKm = idFraisKm;
-        this.idvisiteur = idvisiteur;
+        this.idvisiteur = Visiteur.getId();
         this.mois = mois;
         this.numero = numero;
         this.quantite = quantite;

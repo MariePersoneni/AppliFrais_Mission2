@@ -120,8 +120,8 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                             String idFraisKm = sousTableau[3];
                             int quantite = Integer.parseInt(sousTableau[4]);
                             String numero = sousTableau[5];
-                            LigneFraisForfait ligneFrais = new LigneFraisForfait(id,mois,idFraisForfait,idFraisKm,quantite,numero);
-                            ligne = new LigneFraisForfait(id,mois,idFraisForfait,idFraisKm,quantite,numero);
+                            LigneFraisForfait ligneFrais = new LigneFraisForfait(mois,idFraisForfait,idFraisKm,quantite,numero);
+                            ligne = new LigneFraisForfait(mois,idFraisForfait,idFraisKm,quantite,numero);
                             break;
                         case "FicheFrais" :
                             mois = sousTableau[0];
