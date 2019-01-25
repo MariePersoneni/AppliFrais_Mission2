@@ -81,6 +81,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                 idVisiteur  = Visiteur.getId();
                 leVisiteur = Visiteur.getInstance(idVisiteur);
                 leVisiteur.setLesFichesDeFrais(lesFiches);
+                lesFiches = lesFiches;
                 break;
         }
     }
@@ -118,7 +119,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                             String idFraisForfait = sousTableau[2];
                             String idFraisKm = sousTableau[3];
                             int quantite = Integer.parseInt(sousTableau[4]);
-                            int numero = Integer.parseInt(sousTableau[5]);
+                            String numero = sousTableau[5];
                             LigneFraisForfait ligneFrais = new LigneFraisForfait(id,mois,idFraisForfait,idFraisKm,quantite,numero);
                             ligne = new LigneFraisForfait(id,mois,idFraisForfait,idFraisKm,quantite,numero);
                             break;
@@ -146,29 +147,37 @@ public class IntermediaireArrierePlan implements AsyncResponse {
      * lui demande d'executer la connexion
      ************************************************************************/
     public void envoiDemandeConnexion(String login, String mdp){
-        tacheArrierePlan = new TacheArrierePlan();
-        tacheArrierePlan.delegate = this;
-        tacheArrierePlan.execute(Controle.GET_ID_VISITEUR,login, mdp);
+        creerDelegate().execute(Controle.GET_ID_VISITEUR,login, mdp);
     }
 
     public void envoiDemandeFraisForfait(String idVisiteur) {
-        tacheArrierePlan = new TacheArrierePlan();
-        tacheArrierePlan.delegate = this;
-        tacheArrierePlan.execute(Controle.GET_LIGNE_FRAIS_FORFAIT, idVisiteur);
+        creerDelegate().execute(Controle.GET_LIGNE_FRAIS_FORFAIT, idVisiteur);
     }
 
     public void envoiDemandeMAJligneFraisForfait(String idVisiteur, String mois, String numero, String qte) {
-        tacheArrierePlan = new TacheArrierePlan();
-        tacheArrierePlan.delegate = this;
         String num = numero.toString();
-        tacheArrierePlan.execute(Controle.MAJ_LIGNE_FRAIS_FORFAIT, idVisiteur, mois,numero, qte);
+        creerDelegate().execute(Controle.MAJ_LIGNE_FRAIS_FORFAIT, idVisiteur, mois,numero, qte);
     }
 
     public void envoiDemandeFicheFrais(String idVisiteur) {
-        tacheArrierePlan = new TacheArrierePlan();
-        tacheArrierePlan.delegate = this;
-        tacheArrierePlan.execute(Controle.GET_FICHES_FRAIS, idVisiteur);
+        creerDelegate().execute(Controle.GET_FICHES_FRAIS, idVisiteur);
+    }
+
+    public void envoiDemandeCreerFicheFrais(String idVisiteur, String anneeMois, String moisPrecedent) {
+        creerDelegate().execute(Controle.CREER_FICHE_FRAIS, idVisiteur, anneeMois, moisPrecedent);
     }
     /************************************************************************
      ************************************************************************/
+
+    /**
+     * Fonction qui créer une nouvelle tache et retourne un nouveau
+     * delegate. Utilisée dans toutes les méthodes de connexion
+     * @return
+     */
+    private TacheArrierePlan creerDelegate(){
+        tacheArrierePlan = new TacheArrierePlan();
+        tacheArrierePlan.delegate = this;
+        return tacheArrierePlan;
+    }
+
 }

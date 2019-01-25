@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,6 +22,7 @@ import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
 import fr.cned.emdsgil.suividevosfrais.Donnees.FicheFrais;
 import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisForfait;
 import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
+import fr.cned.emdsgil.suividevosfrais.Outils.Fonctions;
 
 public class NuiteeActivity extends AppCompatActivity {
 
@@ -33,6 +36,8 @@ public class NuiteeActivity extends AppCompatActivity {
     private LigneFraisForfait ligneEnCours;
     private List lesFichesDeFraisDuVisiteur;
     private FicheFrais ficheEnCours;
+    private String anneeMois;
+    private static String numero = "2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,24 +87,26 @@ public class NuiteeActivity extends AppCompatActivity {
         if (mois < 10) {
             numMois = "0" + mois;
         }
-        String anneMois = annee.toString() + numMois;
+        anneeMois = annee.toString() + numMois;
         // Recherche d'une fiche de frais pour ce mois
-        ficheEnCours = new FicheFrais(anneMois,"");
-        if (lesFichesDeFraisDuVisiteur.contains(ficheEnCours)){
-            int index = lesFichesDeFraisDuVisiteur.indexOf(ficheEnCours);
-            ficheEnCours = (FicheFrais) lesFichesDeFraisDuVisiteur.get(index);
-        } else {
-            // TO DO
-        }
+//        ficheEnCours = new FicheFrais(anneeMois,"");
+//        if (lesFichesDeFraisDuVisiteur.contains(ficheEnCours)){
+//            int index = lesFichesDeFraisDuVisiteur.indexOf(ficheEnCours);
+//            ficheEnCours = (FicheFrais) lesFichesDeFraisDuVisiteur.get(index);
+//        } else {
+//            // TO DO
+//        }
         /* Recherche d'une ligne de frais existante pour cette periode
          * Si une ligne existe on la place dans la variable ligneEnCours */
-        ligneEnCours = new LigneFraisForfait(idVisiteur,anneMois,"NUI","",0,0);
-        if (lesFraisDuVisiteur.contains(ligneEnCours)){
-            int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
-            ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
-        }
+//        ligneEnCours = new LigneFraisForfait(idVisiteur, anneeMois,"NUI","",0,0);
+//        if (lesFraisDuVisiteur.contains(ligneEnCours)){
+//            int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
+//            ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
+//        }
         /* Récupération de la quantité de la ligne en cours
          * puis affichage*/
+        ficheEnCours = getLaFicheEnCours();
+        ligneEnCours = getLaligneEnCours();
         qte = ligneEnCours.getQuantite();
         ((EditText)findViewById(R.id.txtNuitee)).setText(qte.toString());
     }
@@ -121,13 +128,16 @@ public class NuiteeActivity extends AppCompatActivity {
     private void cmdValider_clic() {
         findViewById(R.id.cmdNuiteeValider).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                Serializer.serialize(Global.listFraisMois, NuiteeActivity.this) ;
-                retourActivityPrincipale() ;
-
+                //Serializer.serialize(Global.listFraisMois, NuiteeActivity.this) ;
+                // fiche inexistante : vérif si date saisie = mois en cours
+                if (Fonctions.estMoisActuel(anneeMois)){
+                    controle.creerFicheFrais(idVisiteur, anneeMois, Fonctions.getMoisPrecedent(anneeMois));
+                    actualiseFraisVisiteur(idVisiteur);
+                }
                 // récuperation du numéro qui fait partie de la clé primaire et envoiDemandeConnexion de la quantité
-                Integer numero = ligneEnCours.getNumero();
                 String mois = ligneEnCours.getMois();
-                controle.MAJligneFraisForfait(idVisiteur, mois, numero.toString(), qte.toString() );
+                controle.MAJligneFraisForfait(idVisiteur, mois, numero, qte.toString() );
+                retourActivityPrincipale() ;
             }
         }) ;
     }
@@ -138,11 +148,11 @@ public class NuiteeActivity extends AppCompatActivity {
     private void cmdPlus_clic() {
         findViewById(R.id.cmdNuiteePlus).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                if (!ficheEnCours.getEtat().equals("CR")){
-                    Toast.makeText(NuiteeActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
-                }else {
+                if (ficheEnCours.getEtat().equals("CR") | ficheEnCours.getEtat().equals("")){
                     qte += 1;
                     ((EditText) findViewById(R.id.txtNuitee)).setText(qte.toString());
+                }else {
+                    Toast.makeText(NuiteeActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
                 }
             }
         }) ;
@@ -154,11 +164,11 @@ public class NuiteeActivity extends AppCompatActivity {
     private void cmdMoins_clic() {
         findViewById(R.id.cmdNuiteeMoins).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                if (!ficheEnCours.getEtat().equals("CR")){
-                    Toast.makeText(NuiteeActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
-                }else {
+               if (ficheEnCours.getEtat().equals("CR") | ficheEnCours.getEtat().equals("")){
                     qte = Math.max(0, qte - 1); // suppression de 10 si possible
                     ((EditText) findViewById(R.id.txtNuitee)).setText(qte.toString());
+                }else {
+                    Toast.makeText(NuiteeActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
                 }
             }
         }) ;
@@ -174,8 +184,7 @@ public class NuiteeActivity extends AppCompatActivity {
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 valoriseProprietes() ;
                 // on/off bouton valider selon l'état de la fiche en cours
-                if (!ficheEnCours.getEtat().equals("CR")) ((Button)findViewById(R.id.cmdNuiteeValider)).setEnabled(false);
-                else ((Button)findViewById(R.id.cmdNuiteeValider)).setEnabled(true);
+                ((Button)findViewById(R.id.cmdNuiteeValider)).setEnabled(ficheEnCours.getEtat().equals("CR")|ficheEnCours.getEtat().equals(""));
             }
         });
     }
@@ -201,5 +210,30 @@ public class NuiteeActivity extends AppCompatActivity {
     private void retourActivityPrincipale() {
         Intent intent = new Intent(NuiteeActivity.this, MenuActivity.class) ;
         startActivity(intent) ;
+    }
+
+    private void actualiseFraisVisiteur(String idVisiteur){
+        controle.getLesFichesDeFrais(idVisiteur);
+        controle.getLesLignesFraisForfait(idVisiteur);
+    }
+
+    private FicheFrais getLaFicheEnCours(){
+        ficheEnCours = new FicheFrais(anneeMois,"");
+        if (lesFichesDeFraisDuVisiteur.contains(ficheEnCours)){
+            int index = lesFichesDeFraisDuVisiteur.indexOf(ficheEnCours);
+            ficheEnCours = (FicheFrais) lesFichesDeFraisDuVisiteur.get(index);
+        } else {
+            // TO DO
+        }
+        return ficheEnCours;
+    }
+
+    private LigneFraisForfait getLaligneEnCours(){
+        ligneEnCours = new LigneFraisForfait(idVisiteur, anneeMois,"NUI","",0,numero);
+        if (lesFraisDuVisiteur.contains(ligneEnCours)){
+            int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
+            ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
+        }
+        return ligneEnCours;
     }
 }

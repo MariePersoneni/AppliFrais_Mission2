@@ -13,6 +13,7 @@ public class Controle {
     public final static String GET_LIGNE_FRAIS_FORFAIT = "getLignesFraisForfait";
     public final  static String GET_FICHES_FRAIS = "getFichesDeFrais";
     public final static String MAJ_LIGNE_FRAIS_FORFAIT = "MAJligneFraisForfait";
+    public final static String CREER_FICHE_FRAIS = "creeFicheFrais";
 
     /**
      * Propriétés
@@ -74,5 +75,9 @@ public class Controle {
 
     public void getLesFichesDeFrais(String idVisiteur) {
         intermediaireArrierePlan.envoiDemandeFicheFrais(idVisiteur);
+    }
+
+    public void creerFicheFrais(String idVisiteur, String anneeMois, String moisPrecedent) {
+        intermediaireArrierePlan.envoiDemandeCreerFicheFrais(idVisiteur,anneeMois, moisPrecedent);
     }
 }

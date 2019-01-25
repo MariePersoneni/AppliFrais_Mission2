@@ -30,28 +30,31 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... parametres) {
         action = parametres[0];
-        String param = "";
-        String idVisiteur;
+        String param = "action=" + action;
+        String idVisiteur = parametres[1];
+        String mois;
         switch (action){
             case Controle.GET_ID_VISITEUR :
                 String login = parametres[1];
                 String mdp = parametres[2];
-                param = "action=readvisiteur&login=" + login + "&mdp=" + mdp;
+                param += "&login=" + login + "&mdp=" + mdp;
                 break;
             case Controle.GET_LIGNE_FRAIS_FORFAIT :
-                idVisiteur = parametres[1];
-                param = "action=getLignesFraisForfait&idVisiteur=" + idVisiteur;
+                param += "&idVisiteur=" + idVisiteur;
                 break;
             case Controle.MAJ_LIGNE_FRAIS_FORFAIT :
-                idVisiteur = parametres[1];
-                String mois = parametres[2];
+                mois = parametres[2];
                 String numero = parametres[3];
                 String qte = parametres[4];
-                param = "action=MAJligneFraisForfait&idVisiteur=" + idVisiteur + "&mois=" + mois + "&numero=" + numero + "&qte=" + qte;
+                param += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&numero=" + numero + "&qte=" + qte;
                 break;
             case Controle.GET_FICHES_FRAIS :
-                idVisiteur = parametres[1];
-                param = "action=getFichesDeFrais&idVisiteur=" + idVisiteur;
+                param += "&idVisiteur=" + idVisiteur;
+                break;
+            case Controle.CREER_FICHE_FRAIS :
+                mois = parametres[2];
+                String moisPrecedent = parametres[3];
+                param += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&moisPrecedent=" + moisPrecedent;
                 break;
         }
         StringBuffer chaine = new StringBuffer("");

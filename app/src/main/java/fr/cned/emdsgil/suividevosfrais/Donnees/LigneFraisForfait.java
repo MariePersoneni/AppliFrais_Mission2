@@ -12,12 +12,12 @@ public class LigneFraisForfait{
     private String idFraisForfait;
     private String idFraisKm;
     private int quantite;
-    private int numero;
+    private String numero;
 
     /**
      * Constructeur qui valorise les propriétés privées
      */
-    public LigneFraisForfait(String idvisiteur, String mois, String idFraisForfait, String idFraisKm, int quantite, int numero){
+    public LigneFraisForfait(String idvisiteur, String mois, String idFraisForfait, String idFraisKm, int quantite, String numero){
         this.idFraisForfait = idFraisForfait;
         this.idFraisKm = idFraisKm;
         this.idvisiteur = idvisiteur;
@@ -31,7 +31,7 @@ public class LigneFraisForfait{
      */
     public String getMois() { return mois; }
     public int getQuantite() { return quantite; }
-    public int getNumero() { return numero; }
+    public String getNumero() { return numero; }
 
     /**
      * Redéfinition de la méthode equals() de la classe Object
