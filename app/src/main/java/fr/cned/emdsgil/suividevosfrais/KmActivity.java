@@ -12,31 +12,61 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import java.util.List;
 import java.util.Locale;
+
+import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
+import fr.cned.emdsgil.suividevosfrais.Donnees.FicheFrais;
+import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisForfait;
+import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
+import fr.cned.emdsgil.suividevosfrais.Outils.Fonctions;
 
 public class KmActivity extends AppCompatActivity {
 
-	// informations affichées dans l'activité
-	private Integer annee ;
-	private Integer mois ;
-	private Integer qte ;
-	
+	/**
+	 * propriétés
+	 */
+	private Integer qte;
+	private Controle controle;
+	private String idVisiteur;
+	private Visiteur leVisiteur;
+	private List lesFraisDuVisiteur;
+	private LigneFraisForfait ligneEnCours;
+	private List lesFichesDeFraisDuVisiteur;
+	private FicheFrais ficheEnCours;
+	private String anneeMois;
+	private static String numero = "3";
+	private static String idFrais = "REP";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_km);
-        setTitle("GSB : Frais Km");
+		controle = Controle.getInstance(this);
+		// récupération  du visiteur et de ses fiches de frais
+		initVisiteur();
 		// modification de l'affichage du DatePicker
 		Global.changeAfficheDate((DatePicker) findViewById(R.id.datKm), false) ;
-		// valorisation des propriétés
-		valoriseProprietes() ;
-        // chargement des méthodes événementielles
+		// initialisation des propriétés
+		valoriseProprietes();
+		// chargement des méthodes événementielles
 		imgReturn_clic() ;
 		cmdValider_clic() ;
 		cmdPlus_clic() ;
 		cmdMoins_clic() ;
 		dat_clic() ;
+	}
+
+	/**
+	 * Valorise les propriétés liées au visiteur
+	 */
+	private void initVisiteur() {
+		idVisiteur = Visiteur.getId();
+		leVisiteur = Visiteur.getInstance(idVisiteur);
+		lesFraisDuVisiteur = leVisiteur.getLesLignesFraisForfait();
+		lesFichesDeFraisDuVisiteur = leVisiteur.getLesFichesDeFrais();
 	}
 
 	@Override
@@ -47,103 +77,107 @@ public class KmActivity extends AppCompatActivity {
 		return true;
 	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getTitle().equals(getString(R.string.retour_accueil))) {
-            retourActivityPrincipale() ;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getTitle().equals(getString(R.string.retour_accueil))) {
+			retourActivityPrincipale() ;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 
-    /**
+	/**
 	 * Valorisation des propriétés avec les informations affichées
 	 */
 	private void valoriseProprietes() {
-		annee = ((DatePicker)findViewById(R.id.datKm)).getYear() ;
-		mois = ((DatePicker)findViewById(R.id.datKm)).getMonth() + 1 ;
-		// récupération de la qte correspondant au mois actuel
-		qte = 0 ;
-		Integer key = annee*100+mois ;
-		if (Global.listFraisMois.containsKey(key)) {
-			qte = Global.listFraisMois.get(key).getKm() ;
+		Integer annee = ((DatePicker)findViewById(R.id.datKm)).getYear() ;
+		Integer mois = ((DatePicker)findViewById(R.id.datKm)).getMonth() + 1 ;
+		String numMois = mois.toString();
+		if (mois < 10) {
+			numMois = "0" + mois;
 		}
-		((EditText)findViewById(R.id.txtKm)).setText(String.format(Locale.FRANCE, "%d", qte)) ;
+		anneeMois = annee.toString() + numMois;
+		getLaFicheEnCours();
+		getLaligneEnCours();
+		qte = ligneEnCours.getQuantite();
+		((EditText)findViewById(R.id.txtKm)).setText(qte.toString());
 	}
-	
+
 	/**
 	 * Sur la selection de l'image : retour au menu principal
 	 */
-    private void imgReturn_clic() {
-    	findViewById(R.id.imgKmReturn).setOnClickListener(new ImageView.OnClickListener() {
-    		public void onClick(View v) {
-    			retourActivityPrincipale() ;    		
-    		}
-    	}) ;
-    }
-
-    /**
-     * Sur le clic du bouton valider : sérialisation
-     */
-    private void cmdValider_clic() {
-    	findViewById(R.id.cmdKmValider).setOnClickListener(new Button.OnClickListener() {
-    		public void onClick(View v) {
-    			Serializer.serialize(Global.listFraisMois, KmActivity.this) ;
-    			retourActivityPrincipale() ;    		
-    		}
-    	}) ;    	
-    }
-    
-    /**
-     * Sur le clic du bouton plus : ajout de 10 dans la quantité
-     */
-    private void cmdPlus_clic() {
-    	findViewById(R.id.cmdKmPlus).setOnClickListener(new Button.OnClickListener() {
-    		public void onClick(View v) {
-    			qte+=10 ;
-    			enregNewQte() ;
-    		}
-    	}) ;    	
-    }
-    
-    /**
-     * Sur le clic du bouton moins : enlève 10 dans la quantité si c'est possible
-     */
-    private void cmdMoins_clic() {
-    	findViewById(R.id.cmdKmMoins).setOnClickListener(new Button.OnClickListener() {
-    		public void onClick(View v) {
-   				qte = Math.max(0, qte-10) ; // suppression de 10 si possible
-    			enregNewQte() ;
-     		}
-    	}) ;    	
-    }
-    
-    /**
-     * Sur le changement de date : mise à jour de l'affichage de la qte
-     */
-    private void dat_clic() {   	
-    	final DatePicker uneDate = (DatePicker) findViewById(R.id.datKm);
-    	uneDate.init(uneDate.getYear(), uneDate.getMonth(), uneDate.getDayOfMonth(), new OnDateChangedListener(){
-			@Override
-			public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-				valoriseProprietes() ;				
+	private void imgReturn_clic() {
+		findViewById(R.id.imgKmReturn).setOnClickListener(new ImageView.OnClickListener() {
+			public void onClick(View v) {
+				retourActivityPrincipale() ;
 			}
-    	});       	
-    }
+		}) ;
+	}
 
 	/**
-	 * Enregistrement dans la zone de texte et dans la liste de la nouvelle qte, à la date choisie
+	 * Sur le clic du bouton valider : MAJ base de données
 	 */
-	private void enregNewQte() {
-		// enregistrement dans la zone de texte
-		((EditText)findViewById(R.id.txtKm)).setText(String.format(Locale.FRANCE, "%d", qte)) ;
-		// enregistrement dans la liste
-		Integer key = annee*100+mois ;
-		if (!Global.listFraisMois.containsKey(key)) {
-			// creation du mois et de l'annee s'ils n'existent pas déjà
-			Global.listFraisMois.put(key, new FraisMois(annee, mois)) ;
-		}
-		Global.listFraisMois.get(key).setKm(qte) ;		
+	private void cmdValider_clic() {
+		findViewById(R.id.cmdKmValider).setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				// fiche inexistante : vérif si date saisie = mois en cours
+				if (Fonctions.estMoisActuel(anneeMois)){
+					controle.creerFicheFrais(idVisiteur, anneeMois, Fonctions.getMoisPrecedent(anneeMois));
+					actualiseFraisVisiteur(idVisiteur);
+				}
+				// récuperation du numéro qui fait partie de la clé primaire et envoiDemandeConnexion de la quantité
+				String mois = ligneEnCours.getMois();
+				controle.MAJligneFraisForfait(idVisiteur, mois, numero, qte.toString() );
+				retourActivityPrincipale() ;
+			}
+		}) ;
+	}
+
+	/**
+	 * Sur le clic du bouton plus : ajout de 1 dans la quantité
+	 */
+	private void cmdPlus_clic() {
+		findViewById(R.id.cmdKmPlus).setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				if (ficheEnCours.getEtat().equals("CR") | ficheEnCours.getEtat().equals("")){
+					qte += 1;
+					((EditText) findViewById(R.id.txtKm)).setText(qte.toString());
+				}else {
+					Toast.makeText(KmActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
+				}
+			}
+		}) ;
+	}
+
+	/**
+	 * Sur le clic du bouton moins : enlève 1 dans la quantité si c'est possible
+	 */
+	private void cmdMoins_clic() {
+		findViewById(R.id.cmdKmMoins).setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				if (ficheEnCours.getEtat().equals("CR") | ficheEnCours.getEtat().equals("")){
+					qte = Math.max(0, qte - 1); // suppression de 10 si possible
+					((EditText) findViewById(R.id.txtKm)).setText(qte.toString());
+				}else {
+					Toast.makeText(KmActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
+				}
+			}
+		}) ;
+	}
+
+	/**
+	 * Sur le changement de date : mise à jour de l'affichage de la qte
+	 */
+	private void dat_clic() {
+		final DatePicker uneDate = (DatePicker) findViewById(R.id.datKm);
+		uneDate.init(uneDate.getYear(), uneDate.getMonth(), uneDate.getDayOfMonth(), new DatePicker.OnDateChangedListener(){
+			@Override
+			public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+				valoriseProprietes() ;
+				// on/off bouton valider selon l'état de la fiche en cours
+				((Button)findViewById(R.id.cmdKmPlus)).setEnabled(ficheEnCours.getEtat().equals("CR")|ficheEnCours.getEtat().equals(""));
+			}
+		});
 	}
 
 	/**
@@ -151,6 +185,38 @@ public class KmActivity extends AppCompatActivity {
 	 */
 	private void retourActivityPrincipale() {
 		Intent intent = new Intent(KmActivity.this, MenuActivity.class) ;
-		startActivity(intent) ;   					
+		startActivity(intent) ;
+	}
+
+	/**
+	 * Actualise les collections du visiteur
+	 * @param idVisiteur
+	 */
+	private void actualiseFraisVisiteur(String idVisiteur){
+		controle.getLesFichesDeFrais(idVisiteur);
+		controle.getLesLignesFraisForfait(idVisiteur);
+	}
+
+	/**
+	 * Retourne la fiche de frais qui correspond à la date affichée
+	 */
+	private void getLaFicheEnCours(){
+		ficheEnCours = new FicheFrais(anneeMois,"");
+		if (lesFichesDeFraisDuVisiteur.contains(ficheEnCours)){
+			int index = lesFichesDeFraisDuVisiteur.indexOf(ficheEnCours);
+			ficheEnCours = (FicheFrais) lesFichesDeFraisDuVisiteur.get(index);
+		}
+	}
+
+	/**
+	 * Retourne la ligne de frais qui correspond à la date affichée et au type de frais selectionné
+	 */
+	private void getLaligneEnCours(){
+		ligneEnCours = new LigneFraisForfait(anneeMois,idFrais,"",0,numero);
+		if (lesFraisDuVisiteur.contains(ligneEnCours)){
+			int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
+			ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
+		}
 	}
 }
+

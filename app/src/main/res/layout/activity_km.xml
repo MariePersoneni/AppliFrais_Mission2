@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_alignParentBottom="true"
-    android:layout_alignParentEnd="true"
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
     android:orientation="vertical"
     android:weightSum="1"
     tools:context=".KmActivity">
@@ -14,10 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.25"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         android:padding="5dp"
-        android:weightSum="1"
-        android:baselineAligned="false">
+        android:weightSum="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,8 +51,8 @@
                 android:autoSizeTextType="uniform"
                 android:gravity="start|center"
                 android:lines="1"
-                android:paddingRight="10dp"
                 android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:text="@string/title_frais_km"
                 android:textColor="@color/colorPrimaryDark" />
 
@@ -64,7 +64,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.4"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <DatePicker
             android:id="@+id/datKm"
@@ -79,81 +80,134 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.25"
         android:baselineAligned="false"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:paddingEnd="10dp"
-            tools:ignore="RtlSymmetry">
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/txtKm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:width="100dp"
-                android:gravity="end|center_vertical"
-                android:inputType="number">
-
-                <requestFocus />
-            </EditText>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            tools:ignore="RtlSymmetry">
-
-            <TextView
-                android:id="@+id/lblKm"
+            <RadioGroup
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/km"
-                android:labelFor="@+id/txtKm"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:layout_height="match_parent">
 
+                <RadioButton
+                    android:id="@+id/radioButton13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="4CV Diesel" />
+
+                <RadioButton
+                    android:id="@+id/radioButton10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="5/6CV Diesel" />
+
+                <RadioButton
+                    android:id="@+id/radioButton11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="4CV Essence" />
+
+                <RadioButton
+                    android:id="@+id/radioButton12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="5/6CV Essence" />
+            </RadioGroup>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:gravity="start|center"
-            android:orientation="vertical"
-            tools:ignore="RtlSymmetry">
+            android:layout_weight="0.6"
+            android:gravity="left"
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/cmdKmPlus"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:gravity="center"
-                android:text="@string/plus"
-                android:textSize="20sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:paddingEnd="10dp"
+                tools:ignore="RtlSymmetry">
 
-            <Button
-                android:id="@+id/cmdKmMoins"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:gravity="center"
-                android:text="@string/moins"
-                android:textSize="20sp" />
+                <EditText
+                    android:id="@+id/txtKm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:width="100dp"
+                    android:gravity="end|center_vertical"
+                    android:inputType="number">
 
+                    <requestFocus />
+                </EditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                tools:ignore="RtlSymmetry">
+
+                <TextView
+                    android:id="@+id/lblKm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:labelFor="@+id/txtKm"
+                    android:text="@string/km"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:gravity="start|center"
+                android:orientation="vertical"
+                tools:ignore="RtlSymmetry">
+
+                <Button
+                    android:id="@+id/cmdKmPlus"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:gravity="center"
+                    android:text="@string/plus"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/cmdKmMoins"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:gravity="center"
+                    android:text="@string/moins"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.15"
+        android:layout_weight="0.1"
+        android:gravity="bottom"
         android:orientation="vertical"
-        android:paddingTop="20dp">
+        android:weightSum="1">
 
         <Button
             android:id="@+id/cmdKmValider"
