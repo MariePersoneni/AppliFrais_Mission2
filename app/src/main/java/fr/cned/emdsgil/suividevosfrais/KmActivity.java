@@ -105,26 +105,9 @@ public class KmActivity extends AppCompatActivity {
 		getLaFicheEnCours();
 		getLaligneEnCours();
 		qte = ligneEnCours.getQuantite();
-		checkIdFraisKm();
 		((EditText)findViewById(R.id.txtKm)).setText(qte.toString());
 	}
 
-	private void checkIdFraisKm() {
-		switch (idFraisKm){
-			case "D4":
-				((RadioButton)findViewById(R.id.rdbD4)).setChecked(true);
-				break;
-			case "D6":
-				((RadioButton)findViewById(R.id.rdbD6)).setChecked(true);
-				break;
-			case "E4":
-				((RadioButton)findViewById(R.id.rdbE4)).setChecked(true);
-				break;
-			case "E6":
-				((RadioButton)findViewById(R.id.rdbE6)).setChecked(true);
-				break;
-		}
-	}
 
 	/**
 	 * Sur la selection de l'image : retour au menu principal
@@ -148,7 +131,7 @@ public class KmActivity extends AppCompatActivity {
 					controle.creerFicheFrais(idVisiteur, anneeMois, Fonctions.getMoisPrecedent(anneeMois));
 					actualiseFraisVisiteur(idVisiteur);
 				}
-				// récuperation du numéro qui fait partie de la clé primaire et envoiDemandeConnexion de la quantité
+				// récuperation du numéro qui fait partie de la clé primaire et envoi de la quantité
 				String mois = ligneEnCours.getMois();
 				controle.MAJligneFraisForfait(idVisiteur, mois, numero, qte.toString() );
 				retourActivityPrincipale() ;
@@ -203,6 +186,9 @@ public class KmActivity extends AppCompatActivity {
 		});
 	}
 
+    /**
+     * evenement sur changement de l'id de Frais km
+     */
 	private void radioGroup_change(){
 		final RadioGroup rdGroup = (RadioGroup)findViewById(R.id.rdgIdFraisKm);
 		rdGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -211,7 +197,7 @@ public class KmActivity extends AppCompatActivity {
 			    // récupération de l'idFraisKm selectionné
 				btnFraisKm = (RadioButton)findViewById(checkedId);
 				idFraisKm = (btnFraisKm.getText()).toString();
-				checkIdFraisKm();
+				btnFraisKm.setChecked(true);
 				valoriseProprietes();
 			}
 		});

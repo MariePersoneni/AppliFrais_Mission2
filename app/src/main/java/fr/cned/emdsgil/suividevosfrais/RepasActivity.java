@@ -123,7 +123,7 @@ public class RepasActivity extends AppCompatActivity {
                     controle.creerFicheFrais(idVisiteur, anneeMois, Fonctions.getMoisPrecedent(anneeMois));
                     actualiseFraisVisiteur(idVisiteur);
                 }
-                // récuperation du numéro qui fait partie de la clé primaire et envoiDemandeConnexion de la quantité
+                // récuperation du numéro qui fait partie de la clé primaire et envoi de la quantité
                 String mois = ligneEnCours.getMois();
                 controle.MAJligneFraisForfait(idVisiteur, mois, numero, qte.toString() );
                 retourActivityPrincipale() ;
