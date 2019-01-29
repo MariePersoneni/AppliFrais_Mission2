@@ -32,6 +32,7 @@ public class LigneFraisForfait{
     public String getMois() { return mois; }
     public int getQuantite() { return quantite; }
     public String getNumero() { return numero; }
+    public String getIdFraisKm() { return idFraisKm; }
 
     /**
      * Redéfinition de la méthode equals() de la classe Object
@@ -43,6 +44,6 @@ public class LigneFraisForfait{
     @Override
     public boolean equals(Object o) {
         LigneFraisForfait ligne = (LigneFraisForfait)o;
-        return Objects.equals(mois, ((LigneFraisForfait) o).mois) && Objects.equals(idFraisForfait, ((LigneFraisForfait) o).idFraisForfait);
+        return Objects.equals(mois, ((LigneFraisForfait) o).mois) && Objects.equals(idFraisForfait, ((LigneFraisForfait) o).idFraisForfait ) && Objects.equals(idFraisKm, ((LigneFraisForfait) o).idFraisKm );
     }
 }

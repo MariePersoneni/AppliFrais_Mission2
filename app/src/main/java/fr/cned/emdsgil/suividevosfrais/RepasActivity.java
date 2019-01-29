@@ -210,7 +210,7 @@ public class RepasActivity extends AppCompatActivity {
      * Retourne la ligne de frais qui correspond à la date affichée et au type de frais selectionné
      */
     private void getLaligneEnCours(){
-        ligneEnCours = new LigneFraisForfait(anneeMois,idFrais,"",0,numero);
+        ligneEnCours = new LigneFraisForfait(anneeMois,idFrais,"null",0,numero);
         if (lesFraisDuVisiteur.contains(ligneEnCours)){
             int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
             ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);

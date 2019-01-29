@@ -1,6 +1,7 @@
 package fr.cned.emdsgil.suividevosfrais;
 
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.util.List;
@@ -37,8 +40,9 @@ public class KmActivity extends AppCompatActivity {
 	private List lesFichesDeFraisDuVisiteur;
 	private FicheFrais ficheEnCours;
 	private String anneeMois;
-	private static String numero = "3";
-	private static String idFrais = "REP";
+	private String idFraisKm = "D4";
+	private RadioButton btnFraisKm;
+	private static String numero;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,7 @@ public class KmActivity extends AppCompatActivity {
 		cmdPlus_clic() ;
 		cmdMoins_clic() ;
 		dat_clic() ;
+		radioGroup_change();
 	}
 
 	/**
@@ -100,7 +105,25 @@ public class KmActivity extends AppCompatActivity {
 		getLaFicheEnCours();
 		getLaligneEnCours();
 		qte = ligneEnCours.getQuantite();
+		checkIdFraisKm();
 		((EditText)findViewById(R.id.txtKm)).setText(qte.toString());
+	}
+
+	private void checkIdFraisKm() {
+		switch (idFraisKm){
+			case "D4":
+				((RadioButton)findViewById(R.id.rdbD4)).setChecked(true);
+				break;
+			case "D6":
+				((RadioButton)findViewById(R.id.rdbD6)).setChecked(true);
+				break;
+			case "E4":
+				((RadioButton)findViewById(R.id.rdbE4)).setChecked(true);
+				break;
+			case "E6":
+				((RadioButton)findViewById(R.id.rdbE6)).setChecked(true);
+				break;
+		}
 	}
 
 	/**
@@ -140,7 +163,7 @@ public class KmActivity extends AppCompatActivity {
 		findViewById(R.id.cmdKmPlus).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				if (ficheEnCours.getEtat().equals("CR") | ficheEnCours.getEtat().equals("")){
-					qte += 1;
+					qte += 10;
 					((EditText) findViewById(R.id.txtKm)).setText(qte.toString());
 				}else {
 					Toast.makeText(KmActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
@@ -156,7 +179,7 @@ public class KmActivity extends AppCompatActivity {
 		findViewById(R.id.cmdKmMoins).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				if (ficheEnCours.getEtat().equals("CR") | ficheEnCours.getEtat().equals("")){
-					qte = Math.max(0, qte - 1); // suppression de 10 si possible
+					qte = Math.max(0, qte - 10); // suppression de 10 si possible
 					((EditText) findViewById(R.id.txtKm)).setText(qte.toString());
 				}else {
 					Toast.makeText(KmActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
@@ -176,6 +199,20 @@ public class KmActivity extends AppCompatActivity {
 				valoriseProprietes() ;
 				// on/off bouton valider selon l'état de la fiche en cours
 				((Button)findViewById(R.id.cmdKmPlus)).setEnabled(ficheEnCours.getEtat().equals("CR")|ficheEnCours.getEtat().equals(""));
+			}
+		});
+	}
+
+	private void radioGroup_change(){
+		final RadioGroup rdGroup = (RadioGroup)findViewById(R.id.rdgIdFraisKm);
+		rdGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+			    // récupération de l'idFraisKm selectionné
+				btnFraisKm = (RadioButton)findViewById(checkedId);
+				idFraisKm = (btnFraisKm.getText()).toString();
+				checkIdFraisKm();
+				valoriseProprietes();
 			}
 		});
 	}
@@ -212,10 +249,12 @@ public class KmActivity extends AppCompatActivity {
 	 * Retourne la ligne de frais qui correspond à la date affichée et au type de frais selectionné
 	 */
 	private void getLaligneEnCours(){
-		ligneEnCours = new LigneFraisForfait(anneeMois,idFrais,"",0,numero);
+		ligneEnCours = new LigneFraisForfait(anneeMois,"null",idFraisKm,0,numero);
 		if (lesFraisDuVisiteur.contains(ligneEnCours)){
 			int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
 			ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
+			idFraisKm = ligneEnCours.getIdFraisKm();
+			numero = ligneEnCours.getNumero();
 		}
 	}
 }

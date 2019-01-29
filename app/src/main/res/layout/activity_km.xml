@@ -94,36 +94,42 @@
             android:orientation="vertical">
 
             <RadioGroup
+                android:id="@+id/rdgIdFraisKm"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
                 <RadioButton
-                    android:id="@+id/radioButton13"
+                    android:id="@+id/rdbD4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="4CV Diesel" />
+                    android:checked="false"
+                    android:text="D4"
+                    tools:text="4CV Diesel" />
 
                 <RadioButton
-                    android:id="@+id/radioButton10"
+                    android:id="@+id/rdbD6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="5/6CV Diesel" />
+                    android:text="D6"
+                    tools:text="5/6CV Diesel" />
 
                 <RadioButton
-                    android:id="@+id/radioButton11"
+                    android:id="@+id/rdbE4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="4CV Essence" />
+                    android:text="E4"
+                    tools:text="4CV Essence" />
 
                 <RadioButton
-                    android:id="@+id/radioButton12"
+                    android:id="@+id/rdbE6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="5/6CV Essence" />
+                    android:text="E6"
+                    tools:text="5/6CV Essence" />
             </RadioGroup>
         </LinearLayout>
 
