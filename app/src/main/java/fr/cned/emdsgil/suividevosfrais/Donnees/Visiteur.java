@@ -11,6 +11,7 @@ public class Visiteur {
     private static String id;
     private List lesLignesFraisForfait;
     private List lesFichesDeFrais;
+    private List lesLignesFraisHF;
 
     /**
      * Constructeur
@@ -20,6 +21,7 @@ public class Visiteur {
         id = idVisiteur;
         lesLignesFraisForfait = new ArrayList<LigneFraisForfait>();
         lesFichesDeFrais = new ArrayList<FicheFrais>();
+        lesLignesFraisHF = new ArrayList<LigneFraisHorsForfait>();
     }
 
     /**
@@ -39,12 +41,14 @@ public class Visiteur {
      * Setters
      */
     public void setLesLignesFraisForfait(List<LigneFraisForfait> lesLignesFraisForfait) { this.lesLignesFraisForfait = lesLignesFraisForfait; }
-    public List getLesFichesDeFrais() { return lesFichesDeFrais; }
+    public void setLesFichesDeFrais(List lesFichesDeFrais) { this.lesFichesDeFrais = lesFichesDeFrais; }
+    public void setLesLignesFraisHF(List lesLignesFraisHF) { this.lesLignesFraisHF = lesLignesFraisHF; }
 
     /**
      * Getters
      */
     public static String getId() {return id;}
     public List<LigneFraisForfait> getLesLignesFraisForfait() {return lesLignesFraisForfait;}
-    public void setLesFichesDeFrais(List lesFichesDeFrais) { this.lesFichesDeFrais = lesFichesDeFrais; }
+    public List getLesFichesDeFrais() { return lesFichesDeFrais; }
+    public List getLesLignesFraisHF() { return lesLignesFraisHF; }
 }

@@ -35,6 +35,7 @@ public class MenuActivity extends AppCompatActivity {
         //controle.getLesFichesDeFrais(idVisiteur);
         controle.getLesLignesFraisForfait(idVisiteur);
         controle.getLesFichesDeFrais(idVisiteur);
+        controle.getLesLignesFraisHF(idVisiteur);
         // chargement des méthodes événementielles
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdKm)), KmActivity.class, idVisiteur);
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHf)), HfActivity.class, idVisiteur);

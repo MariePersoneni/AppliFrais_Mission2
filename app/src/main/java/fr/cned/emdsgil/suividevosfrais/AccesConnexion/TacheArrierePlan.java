@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 import fr.cned.emdsgil.suividevosfrais.AccesConnexion.AsyncResponse;
@@ -56,6 +57,9 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
                 String moisPrecedent = parametres[3];
                 param += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&moisPrecedent=" + moisPrecedent;
                 break;
+            case Controle.GET_LIGNE_FRAIS_HF :
+                param += "&idVisiteur=" + idVisiteur;
+                break;
         }
         StringBuffer chaine = new StringBuffer("");
         try{
@@ -79,6 +83,7 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
             BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream)); // lecteur qui va lire la requête
             String line = "";
             while((line = rd.readLine()) != null){
+                line = URLDecoder.decode(line, "UTF-8");
                 chaine.append(line); // alimentation de chaine avec les réponses
             }
         } catch (IOException e){
