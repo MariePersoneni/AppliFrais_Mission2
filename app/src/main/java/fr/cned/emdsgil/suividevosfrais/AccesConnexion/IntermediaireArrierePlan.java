@@ -41,7 +41,6 @@ public class IntermediaireArrierePlan implements AsyncResponse {
     public void processFinish(String output, String action) {
         // init variables réccurrentes
         String idVisiteur = null;
-        idVisiteur = idVisiteur;
         Visiteur leVisiteur;
         switch (action){
             /**
@@ -153,16 +152,10 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                             idVisiteur = sousTableau[1];
                             mois = sousTableau[2];
                             String libelle = sousTableau[3];
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                            Date date = null;
-                            try {
-                                date = format.parse(sousTableau[4]);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
+                            Integer jour = Integer.parseInt(sousTableau[4].substring(8));
                             Float montant = Float.parseFloat(sousTableau[5]);
-                            //LigneFraisHorsForfait ligneFraisHF = new LigneFraisHorsForfait(id,mois,libelle,date, montant);
-                            ligne = new LigneFraisHorsForfait(id,mois,libelle,date, montant);
+                            //LigneFraisHorsForfait ligneFraisHF = new LigneFraisHorsForfait(id,mois,libelle,jour, montant);
+                            ligne = new LigneFraisHorsForfait(id,mois,libelle,jour, montant);
                             break;
                         case "FicheFrais" :
                             mois = sousTableau[0];

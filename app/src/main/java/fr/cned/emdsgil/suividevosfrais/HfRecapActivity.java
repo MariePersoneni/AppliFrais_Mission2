@@ -85,20 +85,20 @@ public class HfRecapActivity extends AppCompatActivity {
 			}
 		}
 		lignesMoisEnCours = lignesMoisEnCours;
-		Integer key = annee*100 + mois ;
-		ArrayList<FraisHf> liste;
-		if (Global.listFraisMois.containsKey(key)) {
-			liste = Global.listFraisMois.get(key).getLesFraisHf() ;
-		}else{
-			liste = new ArrayList<>() ;
-			/* Retrait du type de l'ArrayList (Optimisation Android Studio)
-			 * Original : Typage explicit =
-			 * liste = new ArrayList<FraisHf>() ;
-			*/
-			// insertion dans la listview
-		}
+//		Integer key = annee*100 + mois ;
+//		ArrayList<FraisHf> liste;
+//		if (Global.listFraisMois.containsKey(key)) {
+//			liste = Global.listFraisMois.get(key).getLesFraisHf() ;
+//		}else{
+//			liste = new ArrayList<>() ;
+//			/* Retrait du type de l'ArrayList (Optimisation Android Studio)
+//			 * Original : Typage explicit =
+//			 * liste = new ArrayList<FraisHf>() ;
+//			*/
+//			// insertion dans la listview
+//		}
 		ListView listView = (ListView) findViewById(R.id.lstHfRecap);
-		FraisHfAdapter adapter = new FraisHfAdapter(HfRecapActivity.this, liste) ;
+		FraisHfAdapter adapter = new FraisHfAdapter(HfRecapActivity.this, lignesMoisEnCours) ;
 		listView.setAdapter(adapter) ;
 	}
 	
