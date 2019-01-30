@@ -4,10 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
@@ -65,7 +62,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
             /**
              * Reception des lignes de frais forfait
              */
-            case Controle.GET_LIGNE_FRAIS_FORFAIT :
+            case Controle.GET_LIGNES_FRAIS_FORFAIT:
                 // récupération des fiches
                 List lesLignesFraisForfait = new ArrayList<LigneFraisForfait>();
                 lesLignesFraisForfait = receptionTableauJSON(output,"LigneFraisForfait", 6);
@@ -76,7 +73,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
             /**
              * Réception des lignes de frais hors forfait
              */
-            case Controle.GET_LIGNE_FRAIS_HF :
+            case Controle.GET_LIGNES_FRAIS_HF:
                 // récupération des fiches
                 List lesLignesFraisHF = new ArrayList<LigneFraisHorsForfait>();
                 lesLignesFraisHF = receptionTableauJSON(output, "LigneFraisHF", 6);
@@ -148,7 +145,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                             ligne = new LigneFraisForfait(mois,idFraisForfait,idFraisKm,quantite,numero);
                             break;
                         case "LigneFraisHF" :
-                            int id = Integer.parseInt(sousTableau[0]);
+                            Integer id = Integer.parseInt(sousTableau[0]);
                             idVisiteur = sousTableau[1];
                             mois = sousTableau[2];
                             String libelle = sousTableau[3];
@@ -185,12 +182,12 @@ public class IntermediaireArrierePlan implements AsyncResponse {
     }
 
     public void envoiDemandeFraisForfait(String idVisiteur) {
-        creerDelegate().execute(Controle.GET_LIGNE_FRAIS_FORFAIT, idVisiteur);
+        creerDelegate().execute(Controle.GET_LIGNES_FRAIS_FORFAIT, idVisiteur);
     }
 
     public void envoiDemandeMAJligneFraisForfait(String idVisiteur, String mois, String numero, String qte) {
         String num = numero.toString();
-        creerDelegate().execute(Controle.MAJ_LIGNE_FRAIS_FORFAIT, idVisiteur, mois,numero, qte);
+        creerDelegate().execute(Controle.UPD_LIGNE_FRAIS_FORFAIT, idVisiteur, mois,numero, qte);
     }
 
     public void envoiDemandeFicheFrais(String idVisiteur) {
@@ -198,11 +195,16 @@ public class IntermediaireArrierePlan implements AsyncResponse {
     }
 
     public void envoiDemandeCreerFicheFrais(String idVisiteur, String anneeMois, String moisPrecedent) {
-        creerDelegate().execute(Controle.CREER_FICHE_FRAIS, idVisiteur, anneeMois, moisPrecedent);
+        creerDelegate().execute(Controle.CRE_FICHE_FRAIS, idVisiteur, anneeMois, moisPrecedent);
     }
 
     public void envoiDemandeFraisHF(String idVisiteur) {
-        creerDelegate().execute(Controle.GET_LIGNE_FRAIS_HF, idVisiteur);
+        creerDelegate().execute(Controle.GET_LIGNES_FRAIS_HF, idVisiteur);
+    }
+
+    public void envoiDemandeSuppLigneHF(Integer id) {
+        String idString = id.toString();
+        creerDelegate().execute(Controle.DEL_LIGNE_FRAIS_HF, idString);
     }
 
     /************************************************************************
@@ -218,6 +220,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
         tacheArrierePlan.delegate = this;
         return tacheArrierePlan;
     }
+
 
 
 }

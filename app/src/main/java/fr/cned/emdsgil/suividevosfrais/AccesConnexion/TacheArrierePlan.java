@@ -12,7 +12,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
-import fr.cned.emdsgil.suividevosfrais.AccesConnexion.AsyncResponse;
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
 
 public class TacheArrierePlan extends AsyncTask<String, Void, String> {
@@ -40,25 +39,29 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
                 String mdp = parametres[2];
                 param += "&login=" + login + "&mdp=" + mdp;
                 break;
-            case Controle.GET_LIGNE_FRAIS_FORFAIT :
+            case Controle.GET_FICHES_FRAIS :
                 param += "&idVisiteur=" + idVisiteur;
                 break;
-            case Controle.MAJ_LIGNE_FRAIS_FORFAIT :
+            case Controle.CRE_FICHE_FRAIS:
+                mois = parametres[2];
+                String moisPrecedent = parametres[3];
+                param += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&moisPrecedent=" + moisPrecedent;
+                break;
+            case Controle.GET_LIGNES_FRAIS_FORFAIT:
+                param += "&idVisiteur=" + idVisiteur;
+                break;
+            case Controle.UPD_LIGNE_FRAIS_FORFAIT:
                 mois = parametres[2];
                 String numero = parametres[3];
                 String qte = parametres[4];
                 param += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&numero=" + numero + "&qte=" + qte;
                 break;
-            case Controle.GET_FICHES_FRAIS :
+            case Controle.GET_LIGNES_FRAIS_HF:
                 param += "&idVisiteur=" + idVisiteur;
                 break;
-            case Controle.CREER_FICHE_FRAIS :
-                mois = parametres[2];
-                String moisPrecedent = parametres[3];
-                param += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&moisPrecedent=" + moisPrecedent;
-                break;
-            case Controle.GET_LIGNE_FRAIS_HF :
-                param += "&idVisiteur=" + idVisiteur;
+            case Controle.DEL_LIGNE_FRAIS_HF:
+                String id = parametres[1];
+                param += "&id=" + id;
                 break;
         }
         StringBuffer chaine = new StringBuffer("");

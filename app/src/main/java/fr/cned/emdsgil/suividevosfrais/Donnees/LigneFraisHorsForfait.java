@@ -6,7 +6,7 @@ public class LigneFraisHorsForfait {
     /**
      * Propriétés
      */
-    private int id;
+    private Integer id;
     private String idVisiteur;
     private String  mois;
     private String libelle;
@@ -31,6 +31,7 @@ public class LigneFraisHorsForfait {
     public String getLibelle() { return libelle; }
     public Integer getJour() { return jour; }
     public float getMontant() { return montant; }
+    public Integer getId() { return id; }
 
     /**
      * Redéfinition de la méthode equals() de la classe Object

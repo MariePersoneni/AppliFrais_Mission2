@@ -10,11 +10,12 @@ public class Controle {
      * Constantes
      */
     public final static String GET_ID_VISITEUR = "getIdVisiteur";
-    public final static String GET_LIGNE_FRAIS_FORFAIT = "getLignesFraisForfait";
+    public final static String GET_LIGNES_FRAIS_FORFAIT = "getLignesFraisForfait";
     public final  static String GET_FICHES_FRAIS = "getFichesDeFrais";
-    public final static String MAJ_LIGNE_FRAIS_FORFAIT = "MAJligneFraisForfait";
-    public final static String CREER_FICHE_FRAIS = "creeFicheFrais";
-    public final static String GET_LIGNE_FRAIS_HF = "getLignesFraisHF";
+    public final static String UPD_LIGNE_FRAIS_FORFAIT = "MAJligneFraisForfait";
+    public final static String CRE_FICHE_FRAIS = "creeFicheFrais";
+    public final static String GET_LIGNES_FRAIS_HF = "getLignesFraisHF";
+    public final static String DEL_LIGNE_FRAIS_HF = "suppLigneFraisHF";
 
     /**
      * Propriétés
@@ -84,5 +85,9 @@ public class Controle {
 
     public void getLesLignesFraisHF(String idVisiteur) {
         intermediaireArrierePlan.envoiDemandeFraisHF(idVisiteur);
+    }
+
+    public void suppLigneHorsForfait(Integer id) {
+        intermediaireArrierePlan.envoiDemandeSuppLigneHF(id);
     }
 }
