@@ -1,11 +1,18 @@
 package fr.cned.emdsgil.suividevosfrais;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -63,8 +70,23 @@ class FraisHfAdapter extends BaseAdapter {
 		TextView txtListJour ;
 		TextView txtListMontant ;
 		TextView txtListMotif ;
+		ImageButton cmdSuppHf;
+
+		/**
+		 * Evenement sur le clic du bouton cmdSuppHF :
+		 * Suppression dans la base de données de cette ligne
+		 * puis mise à jour de l'adapter
+		 */
+		public void cmdSuppHf_onClick(){
+			cmdSuppHf.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					txtListMotif.setText("test");
+				}
+			});
+		}
 	}
-	
+
 	/**
 	 * Affichage dans la liste
 	 */
@@ -81,6 +103,8 @@ class FraisHfAdapter extends BaseAdapter {
 			holder.txtListJour = convertView.findViewById(R.id.txtListJour);
 			holder.txtListMontant = convertView.findViewById(R.id.txtListMontant);
 			holder.txtListMotif = convertView.findViewById(R.id.txtListMotif);
+			holder.cmdSuppHf = convertView.findViewById(R.id.cmdSuppHf);
+			holder.cmdSuppHf_onClick();
 			// Insertion du holder dans le layout
 			convertView.setTag(holder) ;
 		}else{
