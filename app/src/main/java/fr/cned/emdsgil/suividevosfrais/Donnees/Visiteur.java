@@ -51,4 +51,8 @@ public class Visiteur {
     public List<LigneFraisForfait> getLesLignesFraisForfait() {return lesLignesFraisForfait;}
     public List getLesFichesDeFrais() { return lesFichesDeFrais; }
     public List getLesLignesFraisHF() { return lesLignesFraisHF; }
+
+    public void SuppLigneFraisHF(LigneFraisHorsForfait ligneFraisHF) {
+        this.lesLignesFraisHF.remove(ligneFraisHF);
+    }
 }

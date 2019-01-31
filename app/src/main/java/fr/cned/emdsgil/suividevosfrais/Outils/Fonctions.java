@@ -41,4 +41,18 @@ public class Fonctions {
         }
         return numAnnee + numMois;
     }
+
+    /**
+     * Retourne le mois sous format AAAAMM
+     * @param annee
+     * @param mois
+     * @return
+     */
+    public static String getFormatMois(Integer annee, Integer mois ){
+        String numMois = mois.toString();
+        if (mois < 10) {
+            numMois = "0" + mois;
+        }
+        return annee.toString() + numMois;
+    }
 }

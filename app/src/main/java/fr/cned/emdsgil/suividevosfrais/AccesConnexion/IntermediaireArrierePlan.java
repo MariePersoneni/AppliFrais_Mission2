@@ -206,6 +206,9 @@ public class IntermediaireArrierePlan implements AsyncResponse {
         String idString = id.toString();
         creerDelegate().execute(Controle.DEL_LIGNE_FRAIS_HF, idString);
     }
+    public void envoiDemandeCreerLigneHF(String id, String anneeMois, String motif, String date, Float montant) {
+        creerDelegate().execute(Controle.CRE_LIGNE_FRAIS_HF, id, anneeMois, motif, date, montant.toString());
+    }
 
     /************************************************************************
      ************************************************************************/

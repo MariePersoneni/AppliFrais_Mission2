@@ -63,6 +63,14 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
                 String id = parametres[1];
                 param += "&id=" + id;
                 break;
+            case Controle.CRE_LIGNE_FRAIS_HF:
+                mois = parametres[2];
+                String libelle = parametres[3];
+                String date = parametres[4];
+                String montant = parametres[5];
+                param += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&libelle=" + libelle + "&date=" + date + "&montant=" + montant;
+                break;
+
         }
         StringBuffer chaine = new StringBuffer("");
         try{

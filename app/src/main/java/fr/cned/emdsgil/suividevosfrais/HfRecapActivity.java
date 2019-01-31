@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
 import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisHorsForfait;
 import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 
@@ -49,7 +50,6 @@ public class HfRecapActivity extends AppCompatActivity {
 	private void initVisiteur() {
 		String idVisiteur = Visiteur.getId();
 		leVisiteur = Visiteur.getInstance(idVisiteur);
-		lesFraisHFduVisiteur = leVisiteur.getLesLignesFraisHF();
 	}
 
 	@Override
@@ -72,6 +72,9 @@ public class HfRecapActivity extends AppCompatActivity {
 	 * Affiche la liste des frais hors forfaits de la date sélectionnée
 	 */
 	private void afficheListe() {
+		// actualise les infos du visiteur
+		leVisiteur = Visiteur.getInstance(Visiteur.getId());
+		lesFraisHFduVisiteur = leVisiteur.getLesLignesFraisHF();
 		Integer annee = ((DatePicker)findViewById(R.id.datHfRecap)).getYear() ;
 		Integer mois = ((DatePicker)findViewById(R.id.datHfRecap)).getMonth() + 1 ;
 		String numMois = mois.toString();
@@ -99,7 +102,8 @@ public class HfRecapActivity extends AppCompatActivity {
 		FraisHfAdapter adapter = new FraisHfAdapter(HfRecapActivity.this, lignesMoisEnCours) ;
 		listView.setAdapter(adapter) ;
 	}
-	
+
+
 	/**
 	 * Sur la selection de l'image : retour au menu principal
 	 */

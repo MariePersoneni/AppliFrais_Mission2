@@ -111,12 +111,15 @@ class FraisHfAdapter extends BaseAdapter {
 			cmdSuppHf.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					txtListMotif.setText("test");
+					// suppression de la ligne dans la BDD
 					controle.suppLigneHorsForfait(id);
+					// Actualisation des lignes de frais HF du visiteur
+					LigneFraisHorsForfait ligneEnCours = (LigneFraisHorsForfait)lesLignesHFduMoisEnCours.get(index);
+					controle.suppLigneHF(ligneEnCours);
 					lesLignesHFduMoisEnCours.remove(index);
+					notifyDataSetChanged();
 				}
 			});
 		}
 	}
-	
 }

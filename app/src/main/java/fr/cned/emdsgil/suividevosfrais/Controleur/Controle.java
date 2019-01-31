@@ -3,6 +3,8 @@ package fr.cned.emdsgil.suividevosfrais.Controleur;
 import android.content.Context;
 
 import fr.cned.emdsgil.suividevosfrais.AccesConnexion.IntermediaireArrierePlan;
+import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisHorsForfait;
+import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 import fr.cned.emdsgil.suividevosfrais.MainActivity;
 
 public class Controle {
@@ -16,6 +18,7 @@ public class Controle {
     public final static String CRE_FICHE_FRAIS = "creeFicheFrais";
     public final static String GET_LIGNES_FRAIS_HF = "getLignesFraisHF";
     public final static String DEL_LIGNE_FRAIS_HF = "suppLigneFraisHF";
+    public static final String CRE_LIGNE_FRAIS_HF = "creerLigneFraisHF";
 
     /**
      * Propriétés
@@ -23,9 +26,10 @@ public class Controle {
     private static Controle instance = null;
     private static Context context;
     private static IntermediaireArrierePlan intermediaireArrierePlan;
+    private Visiteur leVisiteur;
 
     private Controle(){
-        super();
+        leVisiteur = Visiteur.getInstance(Visiteur.getId());
     }
 
     /**
@@ -89,5 +93,13 @@ public class Controle {
 
     public void suppLigneHorsForfait(Integer id) {
         intermediaireArrierePlan.envoiDemandeSuppLigneHF(id);
+    }
+
+    public void creerLigneFraisHF(String id, String anneeMois, String motif, String date, Float montant) {
+        intermediaireArrierePlan.envoiDemandeCreerLigneHF(id, anneeMois, motif, date, montant);
+    }
+
+    public void suppLigneHF(LigneFraisHorsForfait ligneFraisHF) {
+        leVisiteur.SuppLigneFraisHF(ligneFraisHF);
     }
 }
