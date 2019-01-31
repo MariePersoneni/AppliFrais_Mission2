@@ -26,11 +26,9 @@ public class Controle {
     private static Controle instance = null;
     private static Context context;
     private static IntermediaireArrierePlan intermediaireArrierePlan;
-    private Visiteur leVisiteur;
+    private static Visiteur visiteur;
 
-    private Controle(){
-        leVisiteur = Visiteur.getInstance(Visiteur.getId());
-    }
+    private Controle(){super(); }
 
     /**
      * Fonction qui retourne l'instance de Controle en cours
@@ -65,10 +63,19 @@ public class Controle {
     /**
      * Méthode qui récupère le résultat de la requête de la part de
      * l'intermédiaire et qui l'envoiDemandeConnexion à la page de connexion (MainActivity)
-     * @param s
+     * @param idVisiteur
+     * @param nom
+     * @param prenom
      */
-    public void RetourRequete_getIdVisiteur(String s){
-        ((MainActivity)context).afficheResultat(s);
+    public void RetourRequete_getIdVisiteur(String idVisiteur, String nom, String prenom){
+        if (idVisiteur.equals("1")){
+            ((MainActivity)context).mdpIncorrect();
+        } else {
+            // création du visiteur
+            Visiteur leVisiteur = new Visiteur(idVisiteur, nom, prenom);
+            visiteur = Visiteur.getInstance(Visiteur.getId());
+            ((MainActivity)context).connexionMenu();
+        }
     }
 
     public void getLesLignesFraisForfait(String idVisiteur) {
@@ -100,6 +107,6 @@ public class Controle {
     }
 
     public void suppLigneHF(LigneFraisHorsForfait ligneFraisHF) {
-        leVisiteur.SuppLigneFraisHF(ligneFraisHF);
+        visiteur.SuppLigneFraisHF(ligneFraisHF);
     }
 }

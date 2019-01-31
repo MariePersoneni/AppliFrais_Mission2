@@ -9,6 +9,8 @@ public class Visiteur {
      */
     private static Visiteur instance = null;
     private static String id;
+    private static String nom;
+    private static String prenom;
     private List lesLignesFraisForfait;
     private List lesFichesDeFrais;
     private List lesLignesFraisHF;
@@ -16,9 +18,13 @@ public class Visiteur {
     /**
      * Constructeur
      * @param idVisiteur
+     * @param nom
+     * @param prenom
      */
-    public Visiteur(String idVisiteur){
+    public Visiteur(String idVisiteur, String nom, String prenom){
         id = idVisiteur;
+        this.nom = nom;
+        this.prenom = prenom;
         lesLignesFraisForfait = new ArrayList<LigneFraisForfait>();
         lesFichesDeFrais = new ArrayList<FicheFrais>();
         lesLignesFraisHF = new ArrayList<LigneFraisHorsForfait>();
@@ -32,7 +38,7 @@ public class Visiteur {
      */
     public static Visiteur getInstance(String idVisiteur){
         if (Visiteur.instance == null) {
-            Visiteur.instance = new Visiteur(idVisiteur);
+            Visiteur.instance = new Visiteur(idVisiteur, nom, prenom);
         }
         return Visiteur.instance;
     }
@@ -51,6 +57,8 @@ public class Visiteur {
     public List<LigneFraisForfait> getLesLignesFraisForfait() {return lesLignesFraisForfait;}
     public List getLesFichesDeFrais() { return lesFichesDeFrais; }
     public List getLesLignesFraisHF() { return lesLignesFraisHF; }
+    public static String getNom() { return nom; }
+    public static String getPrenom() { return prenom; }
 
     public void SuppLigneFraisHF(LigneFraisHorsForfait ligneFraisHF) {
         this.lesLignesFraisHF.remove(ligneFraisHF);

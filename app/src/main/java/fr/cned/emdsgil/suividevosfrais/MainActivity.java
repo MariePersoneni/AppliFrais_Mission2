@@ -3,14 +3,10 @@ package fr.cned.emdsgil.suividevosfrais;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.util.Calendar;
-import java.util.Date;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
 import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
@@ -60,25 +56,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Méthode qui récupère le résultat de la demande de connexion
-     * Si le login et le mot de passe sont correct, la méthode appelle
-     * l'activity de menu
-     *
-     * @param idVisiteur : vaut 1 si la récupération des données à echoué
-     *                 sinon contient l'id du visiteur
-     *
-     */
-    public void afficheResultat(String idVisiteur){
-        if (idVisiteur.equals("1")){
-            Toast.makeText(MainActivity.this, "Login / mdp incorrect", Toast.LENGTH_SHORT).show();
-        } else {
-            //Toast.makeText(MainActivity.this, "Connexion réussie :",Toast.LENGTH_SHORT).show();
-            // création du visiteur
-            Visiteur leVisiteur = new Visiteur(idVisiteur);
-            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-            // intent.putExtra("idVisiteur",idVisiteur);
-            startActivity(intent);
-        }
+    public void mdpIncorrect() {
+        Toast.makeText(MainActivity.this, "Login / mdp incorrect", Toast.LENGTH_SHORT).show();
+    }
+
+    public void connexionMenu() {
+        Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+        // intent.putExtra("idVisiteur",idVisiteur);
+        startActivity(intent);
     }
 }

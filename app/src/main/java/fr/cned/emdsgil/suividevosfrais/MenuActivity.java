@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -31,6 +32,8 @@ public class MenuActivity extends AppCompatActivity {
         // récupère l'id du visiteur
         String idVisiteur = Visiteur.getId();
         leVisiteur = Visiteur.getInstance(idVisiteur);
+        String profil = leVisiteur.getPrenom() + " " + leVisiteur.getNom();
+        ((TextView)findViewById(R.id.txtProfil)).setText(profil);
         // récupération des frais du visiteur
         //controle.getLesFichesDeFrais(idVisiteur);
         controle.getLesLignesFraisForfait(idVisiteur);
@@ -43,7 +46,7 @@ public class MenuActivity extends AppCompatActivity {
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdNuitee)), NuiteeActivity.class, idVisiteur);
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdEtape)), EtapeActivity.class, idVisiteur);
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHfRecap)), HfRecapActivity.class, idVisiteur);
-        cmdTransfert_clic();
+        //cmdTransfert_clic();
     }
 
     @Override
@@ -97,15 +100,15 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Cas particulier du bouton pour le transfert d'informations vers le serveur
-     */
-    private void cmdTransfert_clic() {
-        findViewById(R.id.cmdTransfert).setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                // envoiDemandeConnexion les informations sérialisées vers le serveur
-                // en construction
-            }
-        });
-    }
+//    /**
+//     * Cas particulier du bouton pour le transfert d'informations vers le serveur
+//     */
+//    private void cmdTransfert_clic() {
+//        findViewById(R.id.cmdTransfert).setOnClickListener(new Button.OnClickListener() {
+//            public void onClick(View v) {
+//                // envoiDemandeConnexion les informations sérialisées vers le serveur
+//                // en construction
+//            }
+//        });
+//    }
 }

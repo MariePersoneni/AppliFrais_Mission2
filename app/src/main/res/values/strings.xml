@@ -6,6 +6,7 @@
     <string name="icon_frais_hf">Icone pour les frais hors forfait</string>
     <string name="icon_recap_frais_hf">Icone pour le récapitulatif des frais hors forfait</string>
     <string name="icon_frais_km">Icone pour les frais kilométriques</string>
+    <string name="icon_profil">Icone pour le profil</string>
     <string name="icon_frais_repas">Icone pour les frais de repas</string>
     <string name="icon_frais_nuitee">Icone pour les frais de nuitées</string>
     <string name="icon_frais_etape">Icone pour les frais d\' étapes</string>

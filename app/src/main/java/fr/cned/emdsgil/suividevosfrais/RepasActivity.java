@@ -173,7 +173,7 @@ public class RepasActivity extends AppCompatActivity {
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 valoriseProprietes() ;
                 // on/off bouton valider selon l'état de la fiche en cours
-                ((Button)findViewById(R.id.cmdRepasPlus)).setEnabled(ficheEnCours.getEtat().equals("CR")|ficheEnCours.getEtat().equals(""));
+                ((Button)findViewById(R.id.cmdRepasValider)).setEnabled(ficheEnCours.getEtat().equals("CR")|ficheEnCours.getEtat().equals(""));
             }
         });
     }

@@ -50,17 +50,19 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                         JSONObject outputJSON = new JSONObject(output);
                         // récupération de l'ID du visiteur
                         String id = outputJSON.getString("id");
-                        controle.RetourRequete_getIdVisiteur(id);
+                        String nom = outputJSON.getString("nom");
+                        String prenom = outputJSON.getString("prenom");
+                        controle.RetourRequete_getIdVisiteur(id, nom, prenom);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 } else {
                     // output = "1" = mdp incorrect
-                    controle.RetourRequete_getIdVisiteur("1");
+                    controle.RetourRequete_getIdVisiteur("1", "", "");
                 }
                 break;
             /**
-             * Reception des lignes de frais forfait
+             * Réception des lignes de frais forfait
              */
             case Controle.GET_LIGNES_FRAIS_FORFAIT:
                 // récupération des fiches
@@ -82,7 +84,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                 leVisiteur.setLesLignesFraisHF(lesLignesFraisHF);
                 break;
             /**
-             * Récuperation des fiches de frais du visiteur
+             * Réception des fiches de frais du visiteur
              */
             case Controle.GET_FICHES_FRAIS :
                 // récupération des fiches
@@ -101,8 +103,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
      * @return
      */
     private Visiteur getLeVisiteur() {
-        String idVisiteur  = Visiteur.getId();
-        Visiteur leVisiteur = Visiteur.getInstance(idVisiteur);
+        Visiteur leVisiteur = Visiteur.getInstance(Visiteur.getId());
         return leVisiteur;
     }
 
