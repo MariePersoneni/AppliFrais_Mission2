@@ -23,7 +23,7 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
      * Fonction qui s'execute en arrière plan, elle lance une requête
      * de connexion avec des paramètres différents selon l'action
      *
-     * @param parametres = le 1er paramètre contient toujours le
+     * @param parametres = parametres[0] contient toujours le
      *                   nom de l'action à réaliser
      * @return le résultat de la requete sous forme d'objet ou de tableau JSON
      */
@@ -35,40 +35,40 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
         String mois;
         switch (action){
             case Controle.GET_ID_VISITEUR :
-                String login = parametres[1];
-                String mdp = parametres[2];
-                param += "&login=" + login + "&mdp=" + mdp;
+                String login    = parametres[1];
+                String mdp      = parametres[2];
+                param           += "&login=" + login + "&mdp=" + mdp;
                 break;
             case Controle.GET_FICHES_FRAIS :
                 param += "&idVisiteur=" + idVisiteur;
                 break;
             case Controle.CRE_FICHE_FRAIS:
-                mois = parametres[2];
-                String moisPrecedent = parametres[3];
-                param += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&moisPrecedent=" + moisPrecedent;
+                mois                    = parametres[2];
+                String moisPrecedent    = parametres[3];
+                param                   += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&moisPrecedent=" + moisPrecedent;
                 break;
             case Controle.GET_LIGNES_FRAIS_FORFAIT:
                 param += "&idVisiteur=" + idVisiteur;
                 break;
             case Controle.UPD_LIGNE_FRAIS_FORFAIT:
-                mois = parametres[2];
-                String numero = parametres[3];
-                String qte = parametres[4];
-                param += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&numero=" + numero + "&qte=" + qte;
+                mois            = parametres[2];
+                String numero   = parametres[3];
+                String qte      = parametres[4];
+                param           += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&numero=" + numero + "&qte=" + qte;
                 break;
             case Controle.GET_LIGNES_FRAIS_HF:
                 param += "&idVisiteur=" + idVisiteur;
                 break;
             case Controle.DEL_LIGNE_FRAIS_HF:
-                String id = parametres[1];
-                param += "&id=" + id;
+                String id   = parametres[1];
+                param       += "&id=" + id;
                 break;
             case Controle.CRE_LIGNE_FRAIS_HF:
-                mois = parametres[2];
-                String libelle = parametres[3];
-                String date = parametres[4];
-                String montant = parametres[5];
-                param += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&libelle=" + libelle + "&date=" + date + "&montant=" + montant;
+                mois            = parametres[2];
+                String libelle  = parametres[3];
+                String date     = parametres[4];
+                String montant  = parametres[5];
+                param           += "&idVisiteur=" + idVisiteur + "&mois=" + mois + "&libelle=" + libelle + "&date=" + date + "&montant=" + montant;
                 break;
 
         }
@@ -82,15 +82,11 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
             connection.setDoOutput(true); // Flux de sortie de la connexion autorisée
             connection.setRequestMethod("POST"); // méthode de requête = POST
             connection.setRequestProperty("charset","utf-8"); // propriété de la requête : charset = UTF-8
-
             try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())){
                 wr.write(postData); // envoiDemandeConnexion de la requête
             }
-
             connection.connect(); // connexion
-
             InputStream inputStream = connection.getInputStream(); // récupération de la réponse
-
             BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream)); // lecteur qui va lire la requête
             String line = "";
             while((line = rd.readLine()) != null){

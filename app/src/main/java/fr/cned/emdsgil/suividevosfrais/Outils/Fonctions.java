@@ -1,7 +1,16 @@
 package fr.cned.emdsgil.suividevosfrais.Outils;
 
+import android.content.res.Resources;
+import android.util.Log;
+import android.view.View;
+import android.widget.DatePicker;
+
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+
+import fr.cned.emdsgil.suividevosfrais.R;
 
 public class Fonctions {
     /**
@@ -54,5 +63,40 @@ public class Fonctions {
             numMois = "0" + mois;
         }
         return annee.toString() + numMois;
+    }
+
+    /**
+     * Modification de l'affichage de la date (juste le mois et l'année, sans le jour)
+     */
+    public static void changeAfficheDate(DatePicker datePicker, boolean afficheJours) {
+        try {
+            Field f[] = datePicker.getClass().getDeclaredFields();
+            for (Field field : f) {
+                int daySpinnerId = Resources.getSystem().getIdentifier("day", "id", "android");
+                datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), null);
+                if (daySpinnerId != 0)
+                {
+                    View daySpinner = datePicker.findViewById(daySpinnerId);
+                    if (!afficheJours)
+                    {
+                        daySpinner.setVisibility(View.GONE);
+                    }
+                }
+            }
+            // date max = date du jour
+            datePicker.setMaxDate(System.currentTimeMillis());
+        } catch (SecurityException | IllegalArgumentException e) {
+            Log.d("ERROR", e.getMessage());
+        }
+    }
+
+    /**
+     * Définit la date minimum autorisée d'un DatePicker d'un an en arrière
+     * @param datePicker
+     */
+    public static void setMinDate(DatePicker datePicker){
+        Calendar dateMin = Calendar.getInstance();
+        dateMin.add(Calendar.DAY_OF_YEAR,-365);
+        datePicker.setMinDate(dateMin.getTimeInMillis());
     }
 }

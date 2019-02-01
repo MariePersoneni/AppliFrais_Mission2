@@ -11,9 +11,9 @@ public class Visiteur {
     private static String id;
     private static String nom;
     private static String prenom;
-    private List lesLignesFraisForfait;
-    private List lesFichesDeFrais;
-    private List lesLignesFraisHF;
+    private static List lesLignesFraisForfait;
+    private static List lesFichesDeFrais;
+    private static List lesLignesFraisHF;
 
     /**
      * Constructeur
@@ -54,12 +54,17 @@ public class Visiteur {
      * Getters
      */
     public static String getId() {return id;}
-    public List<LigneFraisForfait> getLesLignesFraisForfait() {return lesLignesFraisForfait;}
-    public List getLesFichesDeFrais() { return lesFichesDeFrais; }
-    public List getLesLignesFraisHF() { return lesLignesFraisHF; }
+    public static List getLesLignesFraisForfait() {return lesLignesFraisForfait;}
+    public static List getLesFichesDeFrais() { return lesFichesDeFrais; }
+    public static List getLesLignesFraisHF() { return lesLignesFraisHF; }
     public static String getNom() { return nom; }
     public static String getPrenom() { return prenom; }
 
+    /**
+     * Supprime la ligne de frais HF passée en paramètre
+     * de la liste des lignes de frais HF du visiteur
+     * @param ligneFraisHF
+     */
     public void SuppLigneFraisHF(LigneFraisHorsForfait ligneFraisHF) {
         this.lesLignesFraisHF.remove(ligneFraisHF);
     }

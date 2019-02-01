@@ -85,7 +85,7 @@ class FraisHfAdapter extends BaseAdapter {
         LigneFraisHorsForfait ligneEnCours = (LigneFraisHorsForfait) lesLignesHFduMoisEnCours.get(index);
 		holder.txtListJour.setText(String.format(Locale.FRANCE, "%d", ligneEnCours.getJour()));
 		holder.txtListMontant.setText(String.format(Locale.FRANCE, "%.2f", ligneEnCours.getMontant())) ;
-		holder.txtListMotif.setText(ligneEnCours.getLibelle()) ;
+		holder.txtListMotif.setText(ligneEnCours.getMotif()) ;
 		holder.index = index;
 		holder.id = ligneEnCours.getId();
 		return convertView ;
@@ -97,7 +97,7 @@ class FraisHfAdapter extends BaseAdapter {
 	private class ViewHolder {
 		TextView txtListJour ;
 		TextView txtListMontant ;
-		TextView txtListMotif ;
+		TextView txtListMotif;
 		ImageButton cmdSuppHf;
 		Integer id;
 		int index;

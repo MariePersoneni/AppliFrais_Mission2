@@ -11,14 +11,14 @@ public class Controle {
     /**
      * Constantes
      */
-    public final static String GET_ID_VISITEUR = "getIdVisiteur";
+    public final static String GET_ID_VISITEUR          = "getIdVisiteur";
     public final static String GET_LIGNES_FRAIS_FORFAIT = "getLignesFraisForfait";
-    public final  static String GET_FICHES_FRAIS = "getFichesDeFrais";
-    public final static String UPD_LIGNE_FRAIS_FORFAIT = "MAJligneFraisForfait";
-    public final static String CRE_FICHE_FRAIS = "creeFicheFrais";
-    public final static String GET_LIGNES_FRAIS_HF = "getLignesFraisHF";
-    public final static String DEL_LIGNE_FRAIS_HF = "suppLigneFraisHF";
-    public static final String CRE_LIGNE_FRAIS_HF = "creerLigneFraisHF";
+    public final static String GET_FICHES_FRAIS         = "getFichesDeFrais";
+    public final static String UPD_LIGNE_FRAIS_FORFAIT  = "MAJligneFraisForfait";
+    public final static String CRE_FICHE_FRAIS          = "creeFicheFrais";
+    public final static String GET_LIGNES_FRAIS_HF      = "getLignesFraisHF";
+    public final static String DEL_LIGNE_FRAIS_HF       = "suppLigneFraisHF";
+    public final static String CRE_LIGNE_FRAIS_HF       = "creerLigneFraisHF";
 
     /**
      * Propriétés
@@ -48,34 +48,14 @@ public class Controle {
         return Controle.instance;
     }
 
-    /**
-     * Méthode quie demande à l'intermédiaire de lancer la connexion
-     * au serveur en lui envoyer le profil et le mdp
-     * récupéré sur l'activity de connexion
-     *
-     * @param login
-     * @param mdp
-     */
-    public void lanceRequete(String login, String mdp){
-        intermediaireArrierePlan.envoiDemandeConnexion(login, mdp);
-    }
 
-    /**
-     * Méthode qui récupère le résultat de la requête de la part de
-     * l'intermédiaire et qui l'envoiDemandeConnexion à la page de connexion (MainActivity)
-     * @param idVisiteur
-     * @param nom
-     * @param prenom
-     */
-    public void RetourRequete_getIdVisiteur(String idVisiteur, String nom, String prenom){
-        if (idVisiteur.equals("1")){
-            ((MainActivity)context).mdpIncorrect();
-        } else {
-            // création du visiteur
-            Visiteur leVisiteur = new Visiteur(idVisiteur, nom, prenom);
-            visiteur = Visiteur.getInstance(Visiteur.getId());
-            ((MainActivity)context).connexionMenu();
-        }
+    /************************************************************************
+     * METHODES DE CONNEXION
+     * Ces méthodes demandent à l'intermédiaire de lancer la connexion et
+     * d'envoyer des requêtes spécifiques.
+     ************************************************************************/
+    public void getIdVisiteur(String login, String mdp){
+        intermediaireArrierePlan.envoiDemandeConnexion(login, mdp);
     }
 
     public void getLesLignesFraisForfait(String idVisiteur) {
@@ -108,5 +88,25 @@ public class Controle {
 
     public void suppLigneHF(LigneFraisHorsForfait ligneFraisHF) {
         visiteur.SuppLigneFraisHF(ligneFraisHF);
+    }
+    /************************************************************************
+     ************************************************************************/
+
+    /**
+     * Méthode qui récupère le résultat de la requête getIdVisiteur et qui vérifie
+     * si le login et le mot de passe sont corrects.
+     * @param idVisiteur
+     * @param nom
+     * @param prenom
+     */
+    public void RetourRequete_getIdVisiteur(String idVisiteur, String nom, String prenom){
+        if (idVisiteur.equals("1")){
+            ((MainActivity)context).mdpIncorrect();
+        } else {
+            // création du visiteur
+            Visiteur leVisiteur = new Visiteur(idVisiteur, nom, prenom);
+            visiteur = Visiteur.getInstance(Visiteur.getId());
+            ((MainActivity)context).connexionMenu();
+        }
     }
 }

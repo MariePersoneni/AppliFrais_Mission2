@@ -11,13 +11,22 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.nio.DoubleBuffer;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
+import fr.cned.emdsgil.suividevosfrais.Donnees.FicheFrais;
 import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 import fr.cned.emdsgil.suividevosfrais.Outils.Fonctions;
 
 public class HfActivity extends AppCompatActivity {
 	private Controle controle;
+	private List lesFichesDeFraisDuVisiteur;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +34,10 @@ public class HfActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_hf);
         setTitle("GSB : Frais HF");
         controle = Controle.getInstance(this);
-        // modification de l'affichage du DatePicker
-        Global.changeAfficheDate((DatePicker) findViewById(R.id.datHf), true) ;
+        lesFichesDeFraisDuVisiteur = Visiteur.getLesFichesDeFrais();
+        // Configuration de la date
+        Fonctions.changeAfficheDate((DatePicker) findViewById(R.id.datHf), true) ;
+		Fonctions.setMinDate((DatePicker)findViewById(R.id.datHf));
 		// mise à 0 du montant
 		((EditText)findViewById(R.id.txtHf)).setText("0") ;
         // chargement des méthodes événementielles
@@ -68,8 +79,6 @@ public class HfActivity extends AppCompatActivity {
     	findViewById(R.id.cmdHfAjouter).setOnClickListener(new Button.OnClickListener() {
     		public void onClick(View v) {
     			enregListe() ;
-    			Serializer.serialize(Global.listFraisMois, HfActivity.this) ;
-    			retourActivityPrincipale() ;    		
     		}
     	}) ;    	
     }
@@ -84,20 +93,21 @@ public class HfActivity extends AppCompatActivity {
 		Integer jour = ((DatePicker)findViewById(R.id.datHf)).getDayOfMonth() ;
 		Float montant = Float.valueOf((((EditText)findViewById(R.id.txtHf)).getText().toString()));
 		String motif = ((EditText)findViewById(R.id.txtHfMotif)).getText().toString() ;
-
-		String anneeMois = Fonctions.getFormatMois(annee, mois);
-		String date = annee + "-" + mois + "-" + jour;
-		// enregistrement dans la BDD
-		controle.creerLigneFraisHF(Visiteur.getId(), anneeMois, motif, date, montant);
-
-
-		// enregistrement dans la liste
-//		Integer key = annee*100+mois ;
-//		if (!Global.listFraisMois.containsKey(key)) {
-//			// creation du mois et de l'annee s'ils n'existent pas déjà
-//			Global.listFraisMois.put(key, new FraisMois(annee, mois)) ;
-//		}
-//		Global.listFraisMois.get(key).addFraisHf(montant, motif, jour) ;
+		// motif obligatoire
+		if (motif.equals("")){
+			Toast.makeText(HfActivity.this, "Motif obligatoire", Toast.LENGTH_SHORT).show();
+		}else{
+			String anneeMois = Fonctions.getFormatMois(annee, mois);
+			// vérification fiche existe pour ce mois
+			String anneeMoisDerniereFiche = ((FicheFrais)lesFichesDeFraisDuVisiteur.get(lesFichesDeFraisDuVisiteur.size()-1)).getMois();
+			if (Fonctions.estMoisActuel(anneeMois) & !anneeMois.equals(anneeMoisDerniereFiche)){
+				controle.creerFicheFrais(Visiteur.getId(), anneeMois, Fonctions.getMoisPrecedent(anneeMois));
+			}
+			String date = annee + "-" + mois + "-" + jour;
+			// enregistrement dans la BDD
+			controle.creerLigneFraisHF(Visiteur.getId(), anneeMois, motif, date, montant);
+			retourActivityPrincipale() ;
+		}
 	}
 
 	/**

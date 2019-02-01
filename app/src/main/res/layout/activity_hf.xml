@@ -136,7 +136,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/motif"
+                android:text="@string/libelle"
                 android:labelFor="@+id/txtHfMotif"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 

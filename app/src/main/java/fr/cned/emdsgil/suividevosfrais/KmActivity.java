@@ -52,7 +52,7 @@ public class KmActivity extends AppCompatActivity {
 		// récupération  du visiteur et de ses fiches de frais
 		initVisiteur();
 		// modification de l'affichage du DatePicker
-		Global.changeAfficheDate((DatePicker) findViewById(R.id.datKm), false) ;
+		Fonctions.changeAfficheDate((DatePicker) findViewById(R.id.datKm), false) ;
 		// initialisation des propriétés
 		valoriseProprietes();
 		// chargement des méthodes événementielles

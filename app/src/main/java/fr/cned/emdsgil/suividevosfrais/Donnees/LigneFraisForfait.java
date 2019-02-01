@@ -43,7 +43,6 @@ public class LigneFraisForfait{
      */
     @Override
     public boolean equals(Object o) {
-        LigneFraisForfait ligne = (LigneFraisForfait)o;
         return Objects.equals(mois, ((LigneFraisForfait) o).mois) && Objects.equals(idFraisForfait, ((LigneFraisForfait) o).idFraisForfait ) && Objects.equals(idFraisKm, ((LigneFraisForfait) o).idFraisKm );
     }
 }

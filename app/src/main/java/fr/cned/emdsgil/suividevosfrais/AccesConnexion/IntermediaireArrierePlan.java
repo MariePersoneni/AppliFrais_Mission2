@@ -14,7 +14,6 @@ import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisHorsForfait;
 import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 
 public class IntermediaireArrierePlan implements AsyncResponse {
-
     /**
      * Propriétés
      */
@@ -131,38 +130,32 @@ public class IntermediaireArrierePlan implements AsyncResponse {
                         sousTableau[j] = sousTableauJSON.getString(j);
                     }
                     // création de l'objet selon le type de Frais
-                    String mois = null;
-                    String idVisiteur = null;
+                    String mois;
                     Object ligne = null;
                     switch (typeCollection){
                         case "LigneFraisForfait":
-                            idVisiteur = sousTableau[0];
                             mois = sousTableau[1];
                             String idFraisForfait = sousTableau[2];
                             String idFraisKm = sousTableau[3];
                             int quantite = Integer.parseInt(sousTableau[4]);
                             String numero = sousTableau[5];
-                            //LigneFraisForfait ligneFrais = new LigneFraisForfait(mois,idFraisForfait,idFraisKm,quantite,numero);
                             ligne = new LigneFraisForfait(mois,idFraisForfait,idFraisKm,quantite,numero);
                             break;
                         case "LigneFraisHF" :
                             Integer id = Integer.parseInt(sousTableau[0]);
-                            idVisiteur = sousTableau[1];
                             mois = sousTableau[2];
                             String libelle = sousTableau[3];
                             Integer jour = Integer.parseInt(sousTableau[4].substring(8));
                             Float montant = Float.parseFloat(sousTableau[5]);
-                            //LigneFraisHorsForfait ligneFraisHF = new LigneFraisHorsForfait(id,mois,libelle,jour, montant);
                             ligne = new LigneFraisHorsForfait(id,mois,libelle,jour, montant);
                             break;
                         case "FicheFrais" :
                             mois = sousTableau[0];
                             String etat = sousTableau[1];
-                            //FicheFrais ligneFiche = new FicheFrais(mois, etat);
                             ligne = new FicheFrais(mois, etat);
                             break;
                     }
-                     //Ajout de cet objet lignedefraisforfait dans la collection tableauMaitre
+                     //Ajout de cet objet dans la collection tableauMaitre
                      tableauMaitre.add(ligne);
                 }
                 return tableauMaitre;
@@ -215,8 +208,8 @@ public class IntermediaireArrierePlan implements AsyncResponse {
      ************************************************************************/
 
     /**
-     * Fonction qui créer une nouvelle tache et retourne un nouveau
-     * delegate. Utilisée dans toutes les méthodes de connexion
+     * Fonction qui créer une nouvelle tache en arrière plan et retourne un
+     * nouveau delegate. Utilisée dans toutes les méthodes de connexion
      * @return
      */
     private TacheArrierePlan creerDelegate(){
@@ -224,7 +217,4 @@ public class IntermediaireArrierePlan implements AsyncResponse {
         tacheArrierePlan.delegate = this;
         return tacheArrierePlan;
     }
-
-
-
 }

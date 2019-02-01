@@ -9,18 +9,18 @@ public class LigneFraisHorsForfait {
     private Integer id;
     private String idVisiteur;
     private String  mois;
-    private String libelle;
+    private String motif;
     private Integer jour;
     private Float montant;
 
     /**
      * Constructeur
      */
-    public LigneFraisHorsForfait(int id, String mois, String libelle, Integer jour, float montant) {
+    public LigneFraisHorsForfait(int id, String mois, String motif, Integer jour, float montant) {
         this.id = id;
         idVisiteur = Visiteur.getId();
         this.mois = mois;
-        this.libelle = libelle;
+        this.motif = motif;
         this.jour = jour;
         this.montant = montant;
     }
@@ -28,7 +28,7 @@ public class LigneFraisHorsForfait {
     /**
      * Getters
      */
-    public String getLibelle() { return libelle; }
+    public String getMotif() { return motif; }
     public Integer getJour() { return jour; }
     public float getMontant() { return montant; }
     public Integer getId() { return id; }
@@ -38,18 +38,18 @@ public class LigneFraisHorsForfait {
      * Nous avons besoin de 2 filtres différents
      * 1- sur le mois pour créer la liste de frais HF par mois
      * 2- sur l'id pour mettre à jour la liste de frais HF du visiteur
-     * @param o
+     * @param ligne
      * @return
      */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object ligne) {
         // si la ligne est non fictive (id différent de 0)
-        if (((LigneFraisHorsForfait) o).id != 0){
+        if (((LigneFraisHorsForfait) ligne).id != 0){
             // on compare l'id
-            return Objects.equals(id, ((LigneFraisHorsForfait) o).id);
+            return Objects.equals(id, ((LigneFraisHorsForfait) ligne).id);
         } else {
             // si elle est fictive on compare le mois
-            return Objects.equals(mois, ((LigneFraisHorsForfait) o).mois);
+            return Objects.equals(mois, ((LigneFraisHorsForfait) ligne).mois);
         }
     }
 }

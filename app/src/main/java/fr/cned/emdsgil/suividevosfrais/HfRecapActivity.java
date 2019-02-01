@@ -21,6 +21,7 @@ import java.util.List;
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
 import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisHorsForfait;
 import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
+import fr.cned.emdsgil.suividevosfrais.Outils.Fonctions;
 
 public class HfRecapActivity extends AppCompatActivity {
 	private String anneeMois;
@@ -34,22 +35,14 @@ public class HfRecapActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_hf_recap);
         setTitle("GSB : Récap Frais HF");
 		// modification de l'affichage du DatePicker
-		Global.changeAfficheDate((DatePicker) findViewById(R.id.datHfRecap), false) ;
+		Fonctions.changeAfficheDate((DatePicker) findViewById(R.id.datHfRecap), false) ;
 		// récupération infos du visiteur
-		initVisiteur();
+        leVisiteur = Visiteur.getInstance(Visiteur.getId());
 		// valorisation des propriétés
 		afficheListe() ;
         // chargement des méthodes événementielles
 		imgReturn_clic() ;
 		dat_clic() ;
-	}
-
-	/**
-	 * Valorise les propriétés liées au visiteur
-	 */
-	private void initVisiteur() {
-		String idVisiteur = Visiteur.getId();
-		leVisiteur = Visiteur.getInstance(idVisiteur);
 	}
 
 	@Override
@@ -77,11 +70,7 @@ public class HfRecapActivity extends AppCompatActivity {
 		lesFraisHFduVisiteur = leVisiteur.getLesLignesFraisHF();
 		Integer annee = ((DatePicker)findViewById(R.id.datHfRecap)).getYear() ;
 		Integer mois = ((DatePicker)findViewById(R.id.datHfRecap)).getMonth() + 1 ;
-		String numMois = mois.toString();
-		if (mois < 10) {
-			numMois = "0" + mois;
-		}
-		anneeMois = annee.toString() + numMois;
+		anneeMois = Fonctions.getFormatMois(annee, mois);
 		// récupération des frais HF pour cette date
 		List lignesMoisEnCours = new ArrayList<LigneFraisHorsForfait>();
 		LigneFraisHorsForfait ligneModele = new LigneFraisHorsForfait(0, anneeMois,"",null,0 );

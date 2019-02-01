@@ -31,5 +31,9 @@ public class FicheFrais {
         return Objects.equals(mois, ((FicheFrais) o).mois);
     }
 
+    /**
+     * Getters
+     */
     public String getEtat() { return etat; }
+    public String getMois() { return mois; }
 }

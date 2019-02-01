@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
-import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 
 public class MainActivity extends AppCompatActivity {
     private Controle controle;
@@ -50,19 +49,27 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Veuillez saisir tous les champs",Toast.LENGTH_SHORT).show();
                 } else {
                     // Envoi de la requête de connexion
-                    controle.lanceRequete(login, mdp);
+                    controle.getIdVisiteur(login, mdp);
                 }
             }
         });
     }
 
+    /**
+     * Fonction qui affiche un message d'erreur si l'identification à échouée
+     * Elle est appelée par le controleur après réception du résultat de la
+     * requête getIdVisiteur
+     */
     public void mdpIncorrect() {
         Toast.makeText(MainActivity.this, "Login / mdp incorrect", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Fonction appelée par le contrôleur si l'identification à réussie
+     * Elle appelle l'activité du menu
+     */
     public void connexionMenu() {
         Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-        // intent.putExtra("idVisiteur",idVisiteur);
         startActivity(intent);
     }
 }
