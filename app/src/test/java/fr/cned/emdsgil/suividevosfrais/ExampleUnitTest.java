@@ -1,4 +1,4 @@
-package fr.bonaparte.gsb.suividevosfrais;
+package fr.cned.emdsgil.suividevosfrais;
 
 import org.junit.Test;
 
