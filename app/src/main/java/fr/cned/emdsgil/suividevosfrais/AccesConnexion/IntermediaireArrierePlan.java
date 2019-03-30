@@ -169,7 +169,7 @@ public class IntermediaireArrierePlan implements AsyncResponse {
     /************************************************************************
      * METHODES DE CONNEXION
      * Ces méthodes créent un objet TacheArrierePlan et
-     * lui demande d'executer la connexion
+     * lui demandent d'executer la connexion
      ************************************************************************/
     public void envoiDemandeConnexion(String login, String mdp){
         creerDelegate().execute(Controle.GET_ID_VISITEUR,login, mdp);
