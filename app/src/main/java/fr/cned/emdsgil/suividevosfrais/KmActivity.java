@@ -126,8 +126,9 @@ public class KmActivity extends AppCompatActivity {
 	private void cmdValider_clic() {
 		findViewById(R.id.cmdKmValider).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				// fiche inexistante : vérif si date saisie = mois en cours
-				if (Fonctions.estMoisActuel(anneeMois)){
+				// vérifie si une fiche existe pour ce mois
+				String anneeMoisDerniereFiche = ((FicheFrais)lesFichesDeFraisDuVisiteur.get(lesFichesDeFraisDuVisiteur.size()-1)).getMois();
+				if (Fonctions.estMoisActuel(anneeMois) & !anneeMois.equals(anneeMoisDerniereFiche)){
 					controle.creerFicheFrais(idVisiteur, anneeMois, Fonctions.getMoisPrecedent(anneeMois));
 					actualiseFraisVisiteur(idVisiteur);
 				}

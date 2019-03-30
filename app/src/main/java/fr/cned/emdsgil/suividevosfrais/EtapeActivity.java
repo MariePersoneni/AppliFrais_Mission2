@@ -33,7 +33,6 @@ public class EtapeActivity extends AppCompatActivity {
     private List lesFichesDeFraisDuVisiteur;
     private FicheFrais ficheEnCours;
     private String anneeMois;
-    private static final String NUMERO = "1";
     private static final String ID_FRAIS = "ETP";
 
     @Override
@@ -123,7 +122,7 @@ public class EtapeActivity extends AppCompatActivity {
      * Retourne la ligne de frais qui correspond à la date affichée et au type de frais selectionné
      */
     private void getLaligneEnCours(){
-        ligneEnCours = new LigneFraisForfait(anneeMois, ID_FRAIS,"null",0, NUMERO);
+        ligneEnCours = new LigneFraisForfait(anneeMois, ID_FRAIS,"null",0, "");
         if (lesFraisDuVisiteur.contains(ligneEnCours)){
             int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
             ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
@@ -158,7 +157,7 @@ public class EtapeActivity extends AppCompatActivity {
                     actualiseFraisVisiteur(Visiteur.getId());
                 }
                 // Mise à jour de la ligne
-                controle.MAJligneFraisForfait(Visiteur.getId(), ligneEnCours.getMois(), NUMERO, qte.toString() );
+                controle.MAJligneFraisForfait(Visiteur.getId(), ligneEnCours.getMois(), ligneEnCours.getNumero(), qte.toString() );
                 retourActivityPrincipale() ;
             }
         }) ;
