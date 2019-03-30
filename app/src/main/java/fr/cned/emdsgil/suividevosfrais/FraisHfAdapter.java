@@ -19,19 +19,21 @@ class FraisHfAdapter extends BaseAdapter {
 	//private final ArrayList<FraisHf> lesFrais ; // liste des frais du mois
 	private final List lesLignesHFduMoisEnCours;
 	private final LayoutInflater inflater ;
+	private final String etatFiche;
 	private Controle controle;
 
     /**
 	 * Constructeur de l'adapter pour valoriser les propriétés
-     * @param context Accès au contexte de l'application
-     * @param lesLignesFraisHF Liste des frais hors forfait
-     */
-	public FraisHfAdapter(Context context,List lesLignesFraisHF) {
+	 * @param context Accès au contexte de l'application
+	 * @param lesLignesFraisHF Liste des frais hors forfait
+	 * @param etatFicheEnCours
+	 */
+	public FraisHfAdapter(Context context, List lesLignesFraisHF, String etatFicheEnCours) {
 		inflater = LayoutInflater.from(context) ;
 		lesLignesHFduMoisEnCours = lesLignesFraisHF;
 		controle = Controle.getInstance(null);
-		//this.lesFrais = lesFrais ;
-    }
+		etatFiche = etatFicheEnCours;
+	}
 	
 	/**
 	 * retourne le nombre d'éléments de la listview
@@ -108,18 +110,22 @@ class FraisHfAdapter extends BaseAdapter {
 		 * puis mise à jour de l'adapter
 		 */
 		public void cmdSuppHf_onClick(){
-			cmdSuppHf.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// suppression de la ligne dans la BDD
-					controle.suppLigneHorsForfait(id);
-					// Actualisation des lignes de frais HF du visiteur
-					LigneFraisHorsForfait ligneEnCours = (LigneFraisHorsForfait)lesLignesHFduMoisEnCours.get(index);
-					controle.suppLigneHF(ligneEnCours);
-					lesLignesHFduMoisEnCours.remove(index);
-					notifyDataSetChanged();
-				}
-			});
+			if (etatFiche.equals("CR")) {
+				cmdSuppHf.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// suppression de la ligne dans la BDD
+						controle.suppLigneHorsForfait(id);
+						// Actualisation des lignes de frais HF du visiteur
+						LigneFraisHorsForfait ligneEnCours = (LigneFraisHorsForfait)lesLignesHFduMoisEnCours.get(index);
+						controle.suppLigneHF(ligneEnCours);
+						lesLignesHFduMoisEnCours.remove(index);
+						notifyDataSetChanged();
+					}
+				});
+			}	 else {
+				cmdSuppHf.setVisibility(View.GONE);
+			}
 		}
 	}
 }

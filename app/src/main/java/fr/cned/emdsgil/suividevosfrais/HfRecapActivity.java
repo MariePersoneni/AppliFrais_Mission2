@@ -17,8 +17,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
+import fr.cned.emdsgil.suividevosfrais.Donnees.FicheFrais;
+import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisForfait;
 import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisHorsForfait;
 import fr.cned.emdsgil.suividevosfrais.Donnees.Visiteur;
 import fr.cned.emdsgil.suividevosfrais.Outils.Fonctions;
@@ -27,7 +30,7 @@ public class HfRecapActivity extends AppCompatActivity {
 	private String anneeMois;
 	private Visiteur leVisiteur;
 	private List lesFraisHFduVisiteur;
-	private List lesFraisDuMois;
+	private List lesFichesFrais;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +70,19 @@ public class HfRecapActivity extends AppCompatActivity {
 	private void afficheListe() {
 		// actualise les infos du visiteur
 		leVisiteur = Visiteur.getInstance(Visiteur.getId());
+		lesFichesFrais = leVisiteur.getLesFichesDeFrais();
 		lesFraisHFduVisiteur = leVisiteur.getLesLignesFraisHF();
 		Integer annee = ((DatePicker)findViewById(R.id.datHfRecap)).getYear() ;
 		Integer mois = ((DatePicker)findViewById(R.id.datHfRecap)).getMonth() + 1 ;
 		anneeMois = Fonctions.getFormatMois(annee, mois);
+		// récupération de l'état de la fiche en cours
+		String etatFicheEnCours = null;
+		FicheFrais ficheModele = new FicheFrais(anneeMois, "");
+		for (Object uneFiche : lesFichesFrais){
+			if(uneFiche.equals(ficheModele)){
+				etatFicheEnCours = ((FicheFrais)uneFiche).getEtat();
+			}
+		}
 		// récupération des frais HF pour cette date
 		List lignesMoisEnCours = new ArrayList<LigneFraisHorsForfait>();
 		LigneFraisHorsForfait ligneModele = new LigneFraisHorsForfait(0, anneeMois,"",null,0 );
@@ -79,7 +91,6 @@ public class HfRecapActivity extends AppCompatActivity {
 				lignesMoisEnCours.add(uneLigne);
 			}
 		}
-		lignesMoisEnCours = lignesMoisEnCours;
 		// Tri croissant des lignes HF du mois en cours par jour
 		Collections.sort(lignesMoisEnCours, new Comparator<LigneFraisHorsForfait>() {
 			@Override
@@ -88,7 +99,7 @@ public class HfRecapActivity extends AppCompatActivity {
 			}
 		});
 		ListView listView = (ListView) findViewById(R.id.lstHfRecap);
-		FraisHfAdapter adapter = new FraisHfAdapter(HfRecapActivity.this, lignesMoisEnCours) ;
+		FraisHfAdapter adapter = new FraisHfAdapter(HfRecapActivity.this, lignesMoisEnCours, etatFicheEnCours) ;
 		listView.setAdapter(adapter) ;
 	}
 
@@ -114,7 +125,7 @@ public class HfRecapActivity extends AppCompatActivity {
 			public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 				afficheListe() ;				
 			}
-    	});       	
+    	});
     }
 
 	/**
