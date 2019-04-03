@@ -38,8 +38,9 @@ public class LigneFraisHorsForfait {
      * Nous avons besoin de 2 filtres différents
      * 1- sur le mois pour créer la liste de frais HF par mois
      * 2- sur l'id pour mettre à jour la liste de frais HF du visiteur
-     * @param ligne
-     * @return
+     * @param ligne : élément à comparer
+     * @return true s'il y a correspondance
+     *          sinon false
      */
     @Override
     public boolean equals(Object ligne) {

@@ -33,8 +33,6 @@ public class KmActivity extends AppCompatActivity {
 	 */
 	private Integer qte;
 	private Controle controle;
-	private String idVisiteur;
-	private Visiteur leVisiteur;
 	private List lesFraisDuVisiteur;
 	private LigneFraisForfait ligneEnCours;
 	private List lesFichesDeFraisDuVisiteur;
@@ -42,7 +40,6 @@ public class KmActivity extends AppCompatActivity {
 	private String anneeMois;
 	private String idFraisKm = "D4";
 	private RadioButton btnFraisKm;
-	private static String numero;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,16 +61,6 @@ public class KmActivity extends AppCompatActivity {
 		radioGroup_change();
 	}
 
-	/**
-	 * Valorise les propriétés liées au visiteur
-	 */
-	private void initVisiteur() {
-		idVisiteur = Visiteur.getId();
-		leVisiteur = Visiteur.getInstance(idVisiteur);
-		lesFraisDuVisiteur = leVisiteur.getLesLignesFraisForfait();
-		lesFichesDeFraisDuVisiteur = leVisiteur.getLesFichesDeFrais();
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -90,18 +77,20 @@ public class KmActivity extends AppCompatActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-
+	/**
+	 * Valorise les propriétés liées au visiteur
+	 */
+	private void initVisiteur() {
+		lesFraisDuVisiteur = Visiteur.getLesLignesFraisForfait();
+		lesFichesDeFraisDuVisiteur = Visiteur.getLesFichesDeFrais();
+	}
 	/**
 	 * Valorisation des propriétés avec les informations affichées
 	 */
 	private void valoriseProprietes() {
 		Integer annee = ((DatePicker)findViewById(R.id.datKm)).getYear() ;
 		Integer mois = ((DatePicker)findViewById(R.id.datKm)).getMonth() + 1 ;
-		String numMois = mois.toString();
-		if (mois < 10) {
-			numMois = "0" + mois;
-		}
-		anneeMois = annee.toString() + numMois;
+		anneeMois = Fonctions.getFormatMois(annee, mois);
 		getLaFicheEnCours();
 		getLaligneEnCours();
 		qte = ligneEnCours.getQuantite();
@@ -109,6 +98,50 @@ public class KmActivity extends AppCompatActivity {
 	}
 
 
+	/**
+	 * Retour à l'activité principale (le menu)
+	 */
+	private void retourActivityPrincipale() {
+		Intent intent = new Intent(KmActivity.this, MenuActivity.class) ;
+		startActivity(intent) ;
+	}
+
+	/**
+	 * Actualise les collections du visiteur
+	 * @param idVisiteur
+	 */
+	private void actualiseFraisVisiteur(String idVisiteur){
+		controle.getLesFichesDeFrais(idVisiteur);
+		controle.getLesLignesFraisForfait(idVisiteur);
+	}
+
+	/**
+	 * Valorise la propriété ficheEnCours avec la fiche de frais
+	 * qui correspond à la date affichée
+	 */
+	private void getLaFicheEnCours(){
+		ficheEnCours = new FicheFrais(anneeMois,"");
+		if (lesFichesDeFraisDuVisiteur.contains(ficheEnCours)){
+			int index = lesFichesDeFraisDuVisiteur.indexOf(ficheEnCours);
+			ficheEnCours = (FicheFrais) lesFichesDeFraisDuVisiteur.get(index);
+		}
+	}
+
+	/**
+	 * Valorise la propriété ligneEnCours avec la ligne de frais qui correspond
+	 * à la date affichée et au type de frais selectionné
+	 */
+	private void getLaligneEnCours(){
+		ligneEnCours = new LigneFraisForfait(anneeMois,"null",idFraisKm,0,"");
+		if (lesFraisDuVisiteur.contains(ligneEnCours)){
+			int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
+			ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
+		}
+	}
+
+	/************************************************************************
+	 * METHODES EVENEMENTIELLES
+	 ************************************************************************/
 	/**
 	 * Sur la selection de l'image : retour au menu principal
 	 */
@@ -129,12 +162,14 @@ public class KmActivity extends AppCompatActivity {
 				// vérifie si une fiche existe pour ce mois
 				String anneeMoisDerniereFiche = ((FicheFrais)lesFichesDeFraisDuVisiteur.get(lesFichesDeFraisDuVisiteur.size()-1)).getMois();
 				if (Fonctions.estMoisActuel(anneeMois) & !anneeMois.equals(anneeMoisDerniereFiche)){
-					controle.creerFicheFrais(idVisiteur, anneeMois, Fonctions.getMoisPrecedent(anneeMois));
-					actualiseFraisVisiteur(idVisiteur);
+					// fiche inexistante : on créé la fiche puis on actualise les listes
+					controle.creerFicheFrais(Visiteur.getId(), anneeMois,
+							Fonctions.getMoisPrecedent(anneeMois));
+					actualiseFraisVisiteur(Visiteur.getId());
 				}
-				// récuperation du numéro qui fait partie de la clé primaire et envoi de la quantité
-				String mois = ligneEnCours.getMois();
-				controle.MAJligneFraisForfait(idVisiteur, mois, numero, qte.toString() );
+				// Mise à jour de la ligne
+				controle.MAJligneFraisForfait(Visiteur.getId(), ligneEnCours.getMois(),
+						ligneEnCours.getNumero(), qte.toString() );
 				retourActivityPrincipale() ;
 			}
 		}) ;
@@ -197,52 +232,23 @@ public class KmActivity extends AppCompatActivity {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 			    // récupération de l'idFraisKm selectionné
 				btnFraisKm = (RadioButton)findViewById(checkedId);
-				idFraisKm = (btnFraisKm.getText()).toString();
+				String textSplit[] = ((btnFraisKm.getText()).toString()).split(" ");
+				String nbChevaux = "";
+				if (textSplit[0].substring(0,1).equals("4")){
+					nbChevaux = "4";
+				}else{
+					nbChevaux = "6";
+				}
+				// valorisation de la propriété privée idFraisKm
+				idFraisKm = textSplit[1].substring(0,1) + nbChevaux;
+				// affichage du nouveau bouton coché
 				btnFraisKm.setChecked(true);
+				/* valorise de nouveau les propriétés
+				   pour afficher les valeurs mises à jour */
 				valoriseProprietes();
 			}
 		});
 	}
 
-	/**
-	 * Retour à l'activité principale (le menu)
-	 */
-	private void retourActivityPrincipale() {
-		Intent intent = new Intent(KmActivity.this, MenuActivity.class) ;
-		startActivity(intent) ;
-	}
-
-	/**
-	 * Actualise les collections du visiteur
-	 * @param idVisiteur
-	 */
-	private void actualiseFraisVisiteur(String idVisiteur){
-		controle.getLesFichesDeFrais(idVisiteur);
-		controle.getLesLignesFraisForfait(idVisiteur);
-	}
-
-	/**
-	 * Retourne la fiche de frais qui correspond à la date affichée
-	 */
-	private void getLaFicheEnCours(){
-		ficheEnCours = new FicheFrais(anneeMois,"");
-		if (lesFichesDeFraisDuVisiteur.contains(ficheEnCours)){
-			int index = lesFichesDeFraisDuVisiteur.indexOf(ficheEnCours);
-			ficheEnCours = (FicheFrais) lesFichesDeFraisDuVisiteur.get(index);
-		}
-	}
-
-	/**
-	 * Retourne la ligne de frais qui correspond à la date affichée et au type de frais selectionné
-	 */
-	private void getLaligneEnCours(){
-		ligneEnCours = new LigneFraisForfait(anneeMois,"null",idFraisKm,0,numero);
-		if (lesFraisDuVisiteur.contains(ligneEnCours)){
-			int index = lesFraisDuVisiteur.indexOf(ligneEnCours);
-			ligneEnCours = (LigneFraisForfait) lesFraisDuVisiteur.get(index);
-			idFraisKm = ligneEnCours.getIdFraisKm();
-			numero = ligneEnCours.getNumero();
-		}
-	}
 }
 
