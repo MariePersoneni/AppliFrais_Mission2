@@ -38,8 +38,9 @@ public class LigneFraisForfait{
      * Redéfinition de la méthode equals() de la classe Object
      * pour pouvoir filtrer les liste uniquement les infos dont
      * on a besoin cad : idVisiteur, mois, type de frais
-     * @param o
-     * @return
+     * @param o : élément à comparer
+     * @return true s'il y a correspondance
+     *          sinon false
      */
     @Override
     public boolean equals(Object o) {

@@ -16,7 +16,6 @@ import fr.cned.emdsgil.suividevosfrais.Donnees.LigneFraisHorsForfait;
 
 class FraisHfAdapter extends BaseAdapter {
 
-	//private final ArrayList<FraisHf> lesFrais ; // liste des frais du mois
 	private final List lesLignesHFduMoisEnCours;
 	private final LayoutInflater inflater ;
 	private final String etatFiche;

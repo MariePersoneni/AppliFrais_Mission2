@@ -108,7 +108,8 @@ public class EtapeActivity extends AppCompatActivity {
     }
 
     /**
-     * Retourne la fiche de frais qui correspond à la date affichée
+     * Valorise la propriété ficheEnCours avec la fiche de frais
+     * qui correspond à la date affichée
      */
     private void getLaFicheEnCours(){
         ficheEnCours = new FicheFrais(anneeMois,"");
@@ -119,7 +120,8 @@ public class EtapeActivity extends AppCompatActivity {
     }
 
     /**
-     * Retourne la ligne de frais qui correspond à la date affichée et au type de frais selectionné
+     * Valorise la propriété ligneEnCours avec la ligne de frais qui correspond
+     * à la date affichée et au type de frais selectionné
      */
     private void getLaligneEnCours(){
         ligneEnCours = new LigneFraisForfait(anneeMois, ID_FRAIS,"null",0, "");

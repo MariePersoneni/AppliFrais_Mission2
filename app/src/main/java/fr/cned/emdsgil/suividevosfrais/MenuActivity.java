@@ -29,7 +29,7 @@ public class MenuActivity extends AppCompatActivity {
         setTitle("GSB : Suivi des frais");
         // récupère le controle
         controle = Controle.getInstance(this);
-        // récupère les infos du visiteur
+        // initialise les infos du visiteur
         String idVisiteur = Visiteur.getId();
         leVisiteur = Visiteur.getInstance(idVisiteur);
         controle.getLesLignesFraisForfait(idVisiteur);

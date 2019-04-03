@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // récupération de l'instance de contrôle
         controle = Controle.getInstance(this);
         ecoute_btnConnexion();
     }

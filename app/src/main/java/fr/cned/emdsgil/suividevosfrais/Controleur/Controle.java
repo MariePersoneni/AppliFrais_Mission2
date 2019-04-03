@@ -43,6 +43,8 @@ public class Controle {
         }
         if(Controle.instance == null){
             Controle.instance = new Controle();
+            /* initialisation de l'intermédiaire qui dialoguera
+            *  avec la tâche d'arrière plan */
             intermediaireArrierePlan = new IntermediaireArrierePlan();
         }
         return Controle.instance;

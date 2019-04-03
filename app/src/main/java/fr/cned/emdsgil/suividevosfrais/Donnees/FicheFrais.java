@@ -22,8 +22,9 @@ public class FicheFrais {
     /**
      * Redéfinition de la méthode equals() de la classe Object
      * Filtre uniquement sur le mois
-     * @param o
-     * @return
+     * @param o : élément à comparer
+     * @return true s'il y a correspondance
+     *          sinon false
      */
     @Override
     public boolean equals(Object o) {

@@ -108,7 +108,8 @@ public class NuiteeActivity extends AppCompatActivity {
     }
 
     /**
-     * Retourne la fiche de frais qui correspond à la date affichée
+     * Valorise la propriété ficheEnCours avec la fiche de frais
+     * qui correspond à la date affichée
      */
     private void getLaFicheEnCours(){
         ficheEnCours = new FicheFrais(anneeMois,"");
@@ -119,7 +120,8 @@ public class NuiteeActivity extends AppCompatActivity {
     }
 
     /**
-     * Retourne la ligne de frais qui correspond à la date affichée et au type de frais selectionné
+     * Valorise la propriété ligneEnCours avec la ligne de frais qui correspond
+     * à la date affichée et au type de frais selectionné
      */
     private void getLaligneEnCours(){
         ligneEnCours = new LigneFraisForfait(anneeMois, ID_FRAIS,"null",0,"");
@@ -188,7 +190,7 @@ public class NuiteeActivity extends AppCompatActivity {
         findViewById(R.id.cmdNuiteeMoins).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 if (ficheEnCours.getEtat().equals("CR") | ficheEnCours.getEtat().equals("")){
-                    qte = Math.max(0, qte - 1); // suppression de 10 si possible
+                    qte = Math.max(0, qte - 1); // suppression de 1 si possible
                     ((EditText) findViewById(R.id.txtNuitee)).setText(qte.toString());
                 }else {
                     Toast.makeText(NuiteeActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();

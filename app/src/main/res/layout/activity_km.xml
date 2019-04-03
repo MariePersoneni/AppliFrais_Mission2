@@ -104,32 +104,28 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="true"
-                    android:text="D4"
-                    tools:text="4CV Diesel" />
+                    android:text="4CV Diesel" />
 
                 <RadioButton
                     android:id="@+id/rdbD6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="D6"
-                    tools:text="5/6CV Diesel" />
+                    android:text="5/6CV Diesel" />
 
                 <RadioButton
                     android:id="@+id/rdbE4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="E4"
-                    tools:text="4CV Essence" />
+                    android:text="4CV Essence" />
 
                 <RadioButton
                     android:id="@+id/rdbE6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="E6"
-                    tools:text="5/6CV Essence" />
+                    android:text="5/6CV Essence" />
             </RadioGroup>
         </LinearLayout>
 
