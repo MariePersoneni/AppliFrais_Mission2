@@ -29,6 +29,7 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
      */
     @Override
     protected String doInBackground(String... parametres) {
+        // Partie construction du paramètre
         action = parametres[0];
         String param = "action=" + action;
         String idVisiteur = parametres[1];
@@ -76,7 +77,7 @@ public class TacheArrierePlan extends AsyncTask<String, Void, String> {
         try{
             String urlParameters = param; // paramètres à envoyer à service.php
             byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8); // paramètres formatés en UTF-8
-            String request = "http://192.168.1.8/Suividevosfrais2/service.php"; // adresse du fichier PHP qui va executer la requête
+            String request = "https://mariepersoneni.yn.fr/service.php"; // adresse du fichier PHP qui va executer la requête
             URL url = new URL(request); // création de l'URL
             HttpURLConnection connection = (HttpURLConnection)url.openConnection(); // création de la connexion
             connection.setDoOutput(true); // Flux de sortie de la connexion autorisée
