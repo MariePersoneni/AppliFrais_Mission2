@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.time.YearMonth;
 import java.util.List;
 
 import fr.cned.emdsgil.suividevosfrais.Controleur.Controle;
@@ -173,7 +174,10 @@ public class RepasActivity extends AppCompatActivity {
         findViewById(R.id.cmdRepasPlus).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 if (ficheEnCours.getEtat().equals("CR") | ficheEnCours.getEtat().equals("")){
-                    qte += 1;
+                    // quantité limitée au nombre de jour du mois x 3 repas
+                    YearMonth yearMonthObject = YearMonth.of(Integer.parseInt(anneeMois.substring(1,4)), Integer.parseInt(anneeMois.substring(5)));
+                    Integer maxQte = yearMonthObject.lengthOfMonth() * 3;
+                    qte = Math.min(maxQte, qte + 1);
                     ((EditText) findViewById(R.id.txtRepas)).setText(qte.toString());
                 }else {
                     Toast.makeText(RepasActivity.this, "Saisie impossible : fiche clôturée", Toast.LENGTH_SHORT).show();
