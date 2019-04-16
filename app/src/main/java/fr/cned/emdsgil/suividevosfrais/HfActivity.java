@@ -38,8 +38,6 @@ public class HfActivity extends AppCompatActivity {
         // Configuration de la date
         Fonctions.changeAfficheDate((DatePicker) findViewById(R.id.datHf), true) ;
 		Fonctions.setMinDate((DatePicker)findViewById(R.id.datHf), false);
-		// mise à 0 du montant
-		((EditText)findViewById(R.id.txtHf)).setText("0") ;
         // chargement des méthodes événementielles
 		imgReturn_clic() ;
 		cmdAjouter_clic() ;
@@ -91,22 +89,27 @@ public class HfActivity extends AppCompatActivity {
 		Integer annee = ((DatePicker)findViewById(R.id.datHf)).getYear() ;
 		Integer mois = ((DatePicker)findViewById(R.id.datHf)).getMonth() + 1 ;
 		Integer jour = ((DatePicker)findViewById(R.id.datHf)).getDayOfMonth() ;
-		Float montant = Float.valueOf((((EditText)findViewById(R.id.txtHf)).getText().toString()));
-		String motif = ((EditText)findViewById(R.id.txtHfMotif)).getText().toString() ;
-		// motif obligatoire
-		if (motif.equals("")){
-			Toast.makeText(HfActivity.this, "Motif obligatoire", Toast.LENGTH_SHORT).show();
-		}else{
-			String anneeMois = Fonctions.getFormatMois(annee, mois);
-			// vérification fiche existe pour ce mois
-			String anneeMoisDerniereFiche = ((FicheFrais)lesFichesDeFraisDuVisiteur.get(lesFichesDeFraisDuVisiteur.size()-1)).getMois();
-			if (Fonctions.estMoisActuel(anneeMois) & !anneeMois.equals(anneeMoisDerniereFiche)){
-				controle.creerFicheFrais(Visiteur.getId(), anneeMois, Fonctions.getMoisPrecedent(anneeMois));
+		Float montant = Float.parseFloat("0");
+		if (((EditText) findViewById(R.id.txtHf)).getText().toString().equals("")){
+			Toast.makeText(HfActivity.this, "Montant obligatoire", Toast.LENGTH_SHORT).show();
+		} else {
+			montant = Float.valueOf((((EditText) findViewById(R.id.txtHf)).getText().toString()));
+			String motif = ((EditText) findViewById(R.id.txtHfMotif)).getText().toString();
+			// motif et montant obligatoires
+			if (motif.equals("")) {
+				Toast.makeText(HfActivity.this, "Motif obligatoires", Toast.LENGTH_SHORT).show();
+			} else {
+				String anneeMois = Fonctions.getFormatMois(annee, mois);
+				// vérification fiche existe pour ce mois
+				String anneeMoisDerniereFiche = ((FicheFrais) lesFichesDeFraisDuVisiteur.get(lesFichesDeFraisDuVisiteur.size() - 1)).getMois();
+				if (Fonctions.estMoisActuel(anneeMois) & !anneeMois.equals(anneeMoisDerniereFiche)) {
+					controle.creerFicheFrais(Visiteur.getId(), anneeMois, Fonctions.getMoisPrecedent(anneeMois));
+				}
+				String date = annee + "-" + mois + "-" + jour;
+				// enregistrement dans la BDD
+				controle.creerLigneFraisHF(Visiteur.getId(), anneeMois, motif, date, montant);
+				retourActivityPrincipale();
 			}
-			String date = annee + "-" + mois + "-" + jour;
-			// enregistrement dans la BDD
-			controle.creerLigneFraisHF(Visiteur.getId(), anneeMois, motif, date, montant);
-			retourActivityPrincipale() ;
 		}
 	}
 

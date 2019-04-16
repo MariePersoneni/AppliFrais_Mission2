@@ -105,6 +105,8 @@
                 android:layout_gravity="center"
                 android:enabled="true"
                 android:gravity="end"
+                android:hint="0"
+                android:textColorHint="@color/colorGrey"
                 android:inputType="number|numberDecimal">
 
                 <requestFocus />
@@ -148,6 +150,8 @@
                 android:layout_weight="1"
                 android:gravity="top|start"
                 android:inputType="text"
+                android:hint="Libellé"
+                android:textColorHint="@color/colorGrey"
                 android:lines="2">
 
             </EditText>
