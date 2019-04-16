@@ -39,6 +39,7 @@ public class HfRecapActivity extends AppCompatActivity {
         setTitle("GSB : Récap Frais HF");
 		// modification de l'affichage du DatePicker
 		Fonctions.changeAfficheDate((DatePicker) findViewById(R.id.datHfRecap), false) ;
+		Fonctions.setMinDate((DatePicker)findViewById(R.id.datHfRecap), true);
 		// récupération infos du visiteur
         leVisiteur = Visiteur.getInstance(Visiteur.getId());
 		// valorisation des propriétés

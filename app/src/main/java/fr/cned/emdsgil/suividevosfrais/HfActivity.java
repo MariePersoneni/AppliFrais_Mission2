@@ -37,7 +37,7 @@ public class HfActivity extends AppCompatActivity {
         lesFichesDeFraisDuVisiteur = Visiteur.getLesFichesDeFrais();
         // Configuration de la date
         Fonctions.changeAfficheDate((DatePicker) findViewById(R.id.datHf), true) ;
-		Fonctions.setMinDate((DatePicker)findViewById(R.id.datHf));
+		Fonctions.setMinDate((DatePicker)findViewById(R.id.datHf), false);
 		// mise à 0 du montant
 		((EditText)findViewById(R.id.txtHf)).setText("0") ;
         // chargement des méthodes événementielles

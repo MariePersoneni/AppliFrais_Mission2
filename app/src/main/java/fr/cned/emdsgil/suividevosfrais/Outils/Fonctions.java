@@ -91,12 +91,23 @@ public class Fonctions {
     }
 
     /**
-     * Définit la date minimum autorisée d'un DatePicker d'un an en arrière
-     * @param datePicker
+     * Définit la date minimum autorisée d'un DatePicker selon le besoin
+     * L'utilisateur doit pouvoir visualiser les informations des frais
+     * validés aussi loin qu'il existe des données soit en septembre 2017
+     * Et il ne doit pas pouvoir saisir de frais hors forfait pour une date
+     * inférieure à un an en arrière
+     * @param datePicker calendrier à bloquer
+     * @param dateDebutAppli  différencie le besoin de date minimum
      */
-    public static void setMinDate(DatePicker datePicker){
+    public static void setMinDate(DatePicker datePicker, boolean dateDebutAppli){
         Calendar dateMin = Calendar.getInstance();
-        dateMin.add(Calendar.DAY_OF_YEAR,-365);
+        if (dateDebutAppli)
+        {
+            dateMin.clear();
+            dateMin.set(2017, Calendar.SEPTEMBER, 1);
+        } else {
+            dateMin.add(Calendar.DAY_OF_YEAR,-365);
+        }
         datePicker.setMinDate(dateMin.getTimeInMillis());
     }
 }

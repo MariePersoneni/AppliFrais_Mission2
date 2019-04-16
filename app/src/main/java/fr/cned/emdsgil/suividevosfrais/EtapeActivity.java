@@ -45,6 +45,7 @@ public class EtapeActivity extends AppCompatActivity {
         initListesVisiteur();
         // modification de l'affichage du DatePicker
         Fonctions.changeAfficheDate((DatePicker) findViewById(R.id.datEtape), false) ;
+        Fonctions.setMinDate((DatePicker)findViewById(R.id.datEtape), true);
         // initialisation des propriétés
         valoriseProprietes();
         // chargement des méthodes événementielles

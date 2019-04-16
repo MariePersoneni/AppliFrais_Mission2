@@ -45,6 +45,7 @@ public class RepasActivity extends AppCompatActivity {
         initVisiteur();
         // modification de l'affichage du DatePicker
         Fonctions.changeAfficheDate((DatePicker) findViewById(R.id.datRepas), false) ;
+        Fonctions.setMinDate((DatePicker)findViewById(R.id.datRepas), true);
         // initialisation des propriétés
         valoriseProprietes();
         // chargement des méthodes événementielles

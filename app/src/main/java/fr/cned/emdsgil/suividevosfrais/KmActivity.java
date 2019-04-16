@@ -50,7 +50,8 @@ public class KmActivity extends AppCompatActivity {
 		initVisiteur();
 		// modification de l'affichage du DatePicker
 		Fonctions.changeAfficheDate((DatePicker) findViewById(R.id.datKm), false) ;
-		// initialisation des propriétés
+		Fonctions.setMinDate((DatePicker)findViewById(R.id.datKm), true);
+// initialisation des propriétés
 		valoriseProprietes();
 		// chargement des méthodes événementielles
 		imgReturn_clic() ;
